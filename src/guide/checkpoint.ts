@@ -65,3 +65,10 @@ export function isInsideQuindio(position: Point): boolean {
 }
 
 export const isInsidePark = isInsideQuindio
+
+export function insideArea(position: Point, outline: [number, number][], towns: Point[]): boolean {
+  if (outline.length > 2 && (insidePolygon(position, outline) || outline.some(([lng, lat]) => distanceMeters(position, { lng, lat }) <= EDGE_MARGIN))) {
+    return true
+  }
+  return towns.some((town) => distanceMeters(position, town) <= 18000)
+}

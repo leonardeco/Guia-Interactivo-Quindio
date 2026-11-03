@@ -1,7 +1,7 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BadgeCheck, Search, Route as RouteIcon } from 'lucide-react'
-import { attractions, zoneColor, type Attraction, type Lang, type Zone } from '../data/attractions'
+import { zoneColor, type Attraction, type Lang, type Zone } from '../data/attractions'
 import { distanceMeters, type Point } from '../guide/geo'
 import { formatDistance } from '../guide/lines'
 import { Sheet } from './Sheet'
@@ -19,11 +19,12 @@ type Props = {
   here: Point
   visited: number[]
   route: number[]
+  places: Attraction[]
   onPick: (place: Attraction) => void
   onClose: () => void
 }
 
-export function PlacesSheet({ lang, here, visited, route, onPick, onClose }: Props) {
+export function PlacesSheet({ lang, here, visited, route, places, onPick, onClose }: Props) {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [zone, setZone] = useState<Zone | null>(null)
@@ -31,7 +32,7 @@ export function PlacesSheet({ lang, here, visited, route, onPick, onClose }: Pro
 
   const list = useMemo(() => {
     const words = normalize(query.trim())
-    return attractions
+    return places
       .filter((place) => !zone || place.zone === zone)
       .filter(
         (place) =>
@@ -43,7 +44,7 @@ export function PlacesSheet({ lang, here, visited, route, onPick, onClose }: Pro
       )
       .map((place) => ({ place, distance: distanceMeters(origin, place) }))
       .sort((a, b) => a.distance - b.distance)
-  }, [query, zone, lang, origin])
+  }, [query, zone, lang, origin, places])
 
   return (
     <Sheet title={t('places')} closeLabel={t('close')} onClose={onClose}>

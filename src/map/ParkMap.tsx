@@ -15,8 +15,7 @@ import {
 } from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { attractions, zoneColor, type Attraction, type Lang, type Zone } from '../data/attractions'
-import boundary from '../data/boundary.json'
+import { zoneColor, type Attraction, type Lang, type Zone } from '../data/attractions'
 import { Avatar, type AvatarMode } from '../guide/Avatar'
 import type { Character } from '../guide/characters'
 import type { Point } from '../guide/geo'
@@ -41,6 +40,9 @@ type Props = {
   selectedId: number | null
   focus: Focus | null
   bottomPadding: number
+  places: Attraction[]
+  outline: [number, number][]
+  fitLabel?: string
   onSelect: (place: Attraction) => void
 }
 
@@ -60,17 +62,19 @@ const rasterStyle: StyleSpecification = {
   layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
 }
 
-const ring = boundary as [number, number][]
-
-export function parkBounds(): LngLatBounds {
-  return ring.reduce((box, [lng, lat]) => box.extend([lng, lat]), new LngLatBounds(ring[0], ring[0]))
+export function boundsOf(places: Attraction[], outline: [number, number][]): LngLatBounds {
+  const seed = outline[0] ?? [places[0]?.lng ?? -75.68, places[0]?.lat ?? 4.46]
+  const box = new LngLatBounds(seed, seed)
+  for (const [lng, lat] of outline) box.extend([lng, lat])
+  for (const place of places) box.extend([place.lng, place.lat])
+  return box
 }
 
-function parkShape() {
+function parkShape(outline: [number, number][]) {
   return {
     type: 'Feature' as const,
     properties: {},
-    geometry: { type: 'Polygon' as const, coordinates: [ring] },
+    geometry: { type: 'Polygon' as const, coordinates: [outline] },
   }
 }
 
@@ -145,9 +149,9 @@ const dashFrames: number[][] = [
   [0, 3.5, 3, 0.5],
 ]
 
-function addLayers(map: MapLibreMap, path: Point[]) {
+function addLayers(map: MapLibreMap, path: Point[], outline: [number, number][]) {
   if (!map.getSource('park')) {
-    map.addSource('park', { type: 'geojson', data: parkShape() })
+    map.addSource('park', { type: 'geojson', data: parkShape(outline) })
     map.addLayer({
       id: 'park-fill',
       type: 'fill',
@@ -244,13 +248,16 @@ function buildPin(place: Attraction): HTMLButtonElement {
 
 export function ParkMap(props: Props) {
   const { t } = useTranslation()
-  const { lang, guide, avatar, user, path, route, visited, nextId, selectedId, focus, onSelect } = props
+  const { lang, guide, avatar, user, path, route, visited, nextId, selectedId, focus, onSelect, places, outline } = props
   const host = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const pinsRef = useRef<Map<number, HTMLButtonElement>>(new Map())
   const avatarMarker = useRef<Marker | null>(null)
   const userMarker = useRef<Marker | null>(null)
   const pathRef = useRef(path)
+  const placesRef = useRef(places)
+  const outlineRef = useRef(outline)
+  const markersRef = useRef<Marker[]>([])
   const selectRef = useRef(onSelect)
   const langRef = useRef(lang)
   const paddingRef = useRef(props.bottomPadding)
@@ -273,6 +280,8 @@ export function ParkMap(props: Props) {
   const [saving, setSaving] = useState<'idle' | 'saving' | 'done' | 'fail'>('idle')
 
   pathRef.current = path
+  placesRef.current = places
+  outlineRef.current = outline
   selectRef.current = onSelect
   langRef.current = lang
   paddingRef.current = props.bottomPadding
@@ -293,16 +302,6 @@ export function ParkMap(props: Props) {
     map.addControl(new AttributionControl({ compact: true }), 'top-right')
     host.current.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show')
 
-    for (const place of attractions) {
-      const button = buildPin(place)
-      button.addEventListener('click', (event) => {
-        event.stopPropagation()
-        selectRef.current(place)
-      })
-      pinsRef.current.set(place.id, button)
-      new Marker({ element: button, anchor: 'bottom' }).setLngLat([place.lng, place.lat]).addTo(map)
-    }
-
     avatarMarker.current = new Marker({ element: avatarEl, anchor: 'bottom', offset: [28, 4] })
       .setLngLat([avatar.pos.lng, avatar.pos.lat])
       .addTo(map)
@@ -316,9 +315,9 @@ export function ParkMap(props: Props) {
       if (!map.isStyleLoaded()) setFailed(true)
     }, 15000)
     map.on('style.load', () => {
-      addLayers(map, pathRef.current)
+      addLayers(map, pathRef.current, outlineRef.current)
       if (tiltedRef.current) applyRelief(map, true)
-      map.fitBounds(parkBounds(), { padding: { top: 72, bottom: 96, left: 28, right: 28 }, duration: 0 })
+      map.fitBounds(boundsOf(placesRef.current, outlineRef.current), { padding: { top: 72, bottom: 96, left: 28, right: 28 }, duration: 0 })
       if (!usingRaster) localizeLabels(map, langRef.current)
       window.requestAnimationFrame(() => {
         host.current?.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show')
@@ -399,8 +398,31 @@ export function ParkMap(props: Props) {
   }, [path, ready])
 
   useEffect(() => {
+    const map = mapRef.current
+    if (!map || !ready) return
+    for (const marker of markersRef.current) marker.remove()
+    markersRef.current = []
+    pinsRef.current.clear()
+    for (const place of places) {
+      const button = buildPin(place)
+      button.addEventListener('click', (event) => {
+        event.stopPropagation()
+        selectRef.current(place)
+      })
+      pinsRef.current.set(place.id, button)
+      markersRef.current.push(new Marker({ element: button, anchor: 'bottom' }).setLngLat([place.lng, place.lat]).addTo(map))
+    }
+    const source = map.getSource('park') as GeoJSONSource | undefined
+    source?.setData(parkShape(outline))
+    map.fitBounds(boundsOf(places, outline), {
+      padding: { top: 72, bottom: bottomInset(map), left: 28, right: 28 },
+      duration: 0,
+    })
+  }, [places, outline, ready])
+
+  useEffect(() => {
     for (const [id, pin] of pinsRef.current) {
-      const place = attractions.find((item) => item.id === id)
+      const place = placesRef.current.find((item) => item.id === id)
       if (!place) continue
       const done = visited.includes(id)
       const onRoute = route.includes(id)
@@ -415,7 +437,7 @@ export function ParkMap(props: Props) {
         if (label) label.textContent = place.name[lang]
       }
     }
-  }, [visited, route, nextId, selectedId, lang, ready, band, filter])
+  }, [visited, route, nextId, selectedId, lang, ready, band, filter, places])
 
   useEffect(() => {
     userEl.setAttribute('aria-label', props.youText)
@@ -459,8 +481,10 @@ export function ParkMap(props: Props) {
   }
 
   function showWholePark() {
-    mapRef.current?.fitBounds(parkBounds(), {
-      padding: { top: 70, bottom: bottomInset(mapRef.current), left: 30, right: 30 },
+    const map = mapRef.current
+    if (!map) return
+    map.fitBounds(boundsOf(placesRef.current, outlineRef.current), {
+      padding: { top: 70, bottom: bottomInset(map), left: 30, right: 30 },
       duration: 900,
     })
   }
@@ -515,7 +539,7 @@ export function ParkMap(props: Props) {
           {tilted ? <Square size={18} aria-hidden="true" /> : <Box size={18} aria-hidden="true" />}
           <span>{tilted ? '2D' : '3D'}</span>
         </button>
-        <button type="button" className="map-tool" onClick={showWholePark} aria-label={t('wholePark')} title={t('wholePark')}>
+        <button type="button" className="map-tool" onClick={showWholePark} aria-label={props.fitLabel ?? t('wholePark')} title={props.fitLabel ?? t('wholePark')}>
           <Maximize2 size={18} aria-hidden="true" />
         </button>
         <button

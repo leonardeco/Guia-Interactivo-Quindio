@@ -1,6 +1,14 @@
-# Guía interactivo del Quindío
+<p align="center">
+  <img src="docs/mapas.svg" alt="Guía del Quindío: el departamento, la isla de Aruba y los vecinos del norte" width="920">
+</p>
+
+<p align="center">
+  <a href="https://guia-interactivo-quindio.vercel.app"><img src="docs/abrir.svg" alt="Abrir la guía" width="220"></a>
+</p>
 
 El departamento, en el celular. Doce municipios, un guía que camina con el visitante, una ruta corta y un pasaporte de sellos. Sirve para quien llega de paso y para quien quiere armar el día: pueblos, café, naturaleza, comida, miradores, rumba y dónde dormir.
+
+Desde **Mapas** se cambia de guía. Aruba es la isla, con su costa. **Quindío y vecinos** deja estos lugares y suma Pereira, Manizales, Sevilla, Caicedonia y Alcalá. El verde de ese mapa sigue siendo solo el departamento. Cada mapa guarda sus sellos.
 
 Se abre en el navegador, se puede dejar en la pantalla de inicio y habla en 25 idiomas. El árabe se lee de derecha a izquierda. La primera vez usa el idioma del teléfono.
 
@@ -9,8 +17,9 @@ El paso a paso está en el [manual](docs/manual.md).
 ## Qué se lleva el visitante
 
 - Un mapa de todo el Quindío, no de un solo parque.
+- Aruba, aparte, y el complemento del norte: Pereira, Manizales y tres pueblos del Valle.
 - Seis guías. Cada uno tiene un oficio: naturaleza, ciudad, mesa, montaña, pueblos u hospedaje.
-- Una ruta de hasta 6 paradas, cerca del pueblo de salida. No atraviesa el departamento de punta a punta.
+- Una ruta de hasta 6 paradas, cerca del pueblo de salida. No salta de una ciudad a otra.
 - Historia del Quindío, y la del lugar cuando hay un hecho público. Si no la hay, el guía dice qué es el sitio y en qué pueblo queda.
 - Un pasaporte: sellos, puntos y medallas. El progreso queda en ese teléfono.
 
@@ -36,7 +45,7 @@ Se elige uno al entrar. Se puede cambiar después, en Ajustes.
 1. Idioma, guía, gustos y pueblo de salida. También se puede mirar el mapa sin armar ruta.
 2. El mapa abre con todo el departamento. De lejos se ven pueblos, parques, miradores, lugares concurridos y las llegadas: el aeropuerto El Edén, en La Tebaida, y la terminal de Armenia. Al acercarse aparecen hoteles, restaurantes y cafés. «3D» inclina el mapa y muestra el relieve.
 3. «Siguiente parada» lleva al guía. Si hay red, la línea sigue las vías principales. Si no, queda una guía en línea recta y el guía lo dice. «Ubícame» sigue al visitante. El sello se marca al llegar al lugar al que iba, o con el botón «Llegué».
-4. En el cuadro se le pregunta, escribiendo o con el micrófono: la historia de un pueblo, dónde comer, dónde dormir o qué ver. «Calendario» reúne las fiestas con fecha pública y pide confirmarlas en la alcaldía.
+4. En el cuadro se le pregunta, escribiendo o con el micrófono: la historia de un pueblo, dónde comer, dónde dormir o qué ver. «Calendario» reúne las fiestas con fecha pública y pide confirmarlas en la alcaldía. En Aruba ese botón no aparece.
 
 Ejemplos que entiende: `historia de Salento`, `dónde comer`, `hotel en Armenia`, `qué ver`.
 
@@ -48,19 +57,19 @@ Los niveles van de Visitante a Embajador del Quindío. Las medallas premian el p
 
 ## De dónde sale lo que se cuenta
 
-Los lugares y el contorno salen de OpenStreetMap. El hospedaje es el que el mapa marca como hotel, finca, hostal, apartamento o camping. El filtro se llama Hospedaje. Varios también se reservan por Airbnb; esta guía no reserva ni se conecta con esa plataforma.
+Los lugares y el contorno salen de OpenStreetMap. El de Aruba es la costa de la isla, no el mar alrededor. El hospedaje es el que el mapa marca como hotel, finca, hostal, apartamento o camping. El filtro se llama Hospedaje. Varios también se reservan por Airbnb; esta guía no reserva ni se conecta con esa plataforma.
 
-La historia se cuenta solo donde hay un hecho público: la fundación de un pueblo, el departamento en 1966, el sismo de 1999, el Paisaje Cultural Cafetero y sitios como el Parque Nacional del Café, el valle del Cocora o el Museo del Oro Quimbaya. El paisaje es Patrimonio Mundial desde 2011. La lista oficial cubre 11 de los 12 municipios; La Tebaida no está en esa lista, aunque sí está en el departamento y ahí queda el aeropuerto. Un negocio sin fecha no recibe una inventada.
+La historia se cuenta solo donde hay un hecho público: la fundación de un pueblo, el departamento en 1966, el sismo de 1999, el Paisaje Cultural Cafetero y sitios como el Parque Nacional del Café, el valle del Cocora o el Museo del Oro Quimbaya. El paisaje es Patrimonio Mundial desde 2011. La lista oficial cubre 11 de los 12 municipios; La Tebaida no está en esa lista, aunque sí está en el departamento y ahí queda el aeropuerto. Un negocio sin fecha no recibe una inventada. Aruba se cuenta con lo que está publicado: país del Reino de los Países Bajos, capital Oranjestad, estatus aparte el 1 de enero de 1986.
 
 En la ficha de un pueblo aparecen las fiestas que ya tienen fecha pública, con la nota de confirmar en la alcaldía. El calendario incluye Calarcá en junio, Armenia hacia el 14 de octubre, Quimbaya el 7 y 8 de diciembre, y Filandia en agosto. Las Fiestas Aniversarias y del Canasto de Filandia se suspendieron en 2026 y la alcaldía no publicó otra fecha. El clima de la ficha sale de Open-Meteo: temperatura y si llueve o no. Las fotos, cuando hay, son de Wikimedia Commons y el crédito lleva el año en que se tomaron: Filandia 2025, Circasia 2024, el valle del Cocora, el Parque Nacional del Café, el aeropuerto El Edén y Calarcá entre 2022 y 2023, y Salento en 2020. Armenia no tiene una foto reciente en Commons, así que su ficha va sin imagen.
 
-«Compartir» copia un enlace. Si hay un lugar abierto, el enlace lo abre (`?lugar=`). Si no, abre la ruta con el pueblo de salida y los gustos (`?desde=` y `?gustos=`).
+«Compartir» copia un enlace. Si hay un lugar abierto, el enlace lo abre (`?lugar=`). Si no, abre la ruta con el pueblo de salida y los gustos (`?desde=` y `?gustos=`). Si el mapa no es el Quindío, el enlace también lleva `?mapa=`.
 
 Nombres y horarios cambian. Conviene confirmar antes de ir. La ficha enlaza la página oficial del Paisaje Cultural Cafetero y quindiocorazondecolombia.com.
 
 ## Privacidad
 
-La ubicación no sale del teléfono y el GPS solo sigue dentro del Quindío. Idioma, guía, gustos, pueblo de salida y sellos quedan en el navegador. No hay cuenta. El texto de la voz sale del teléfono solo mientras el guía habla.
+La ubicación no sale del teléfono. El GPS sigue dentro del mapa que está abierto: el departamento, la isla de Aruba, o cerca de Pereira, Manizales, Sevilla, Caicedonia y Alcalá. Idioma, guía, gustos, pueblo de salida y sellos quedan en el navegador. No hay cuenta. El texto de la voz sale del teléfono solo mientras el guía habla.
 
 ## Correrla
 
@@ -93,7 +102,7 @@ React 19, TypeScript y Vite 7. El mapa es MapLibre, con el estilo Liberty de Ope
 
 ```
 src/App.tsx            Recorrido, voz, GPS y paneles
-src/data/              Lugares, historia y contorno
+src/data/              Lugares, historia, contornos y los tres mapas
 src/guide/             Guías, voz, ruta, preguntas y llegada
 src/i18n/              25 idiomas
 src/map/ParkMap.tsx    Mapa, pines y filtros

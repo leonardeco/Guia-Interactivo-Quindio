@@ -1,4 +1,4 @@
-import { attractions } from '../data/attractions'
+import { attractions, type Attraction } from '../data/attractions'
 
 export const XP_PER_STAMP = 100
 export const XP_PER_BADGE = 50
@@ -9,18 +9,17 @@ export type BadgeId = 'first' | 'five' | 'ten' | 'coffee' | 'views' | 'table' | 
 
 export const badgeOrder: BadgeId[] = ['first', 'five', 'ten', 'coffee', 'views', 'table', 'route', 'legend']
 
-const coffeeIds = attractions.filter((place) => place.tags.includes('coffee')).map((place) => place.id)
-const viewIds = attractions.filter((place) => place.zone === 'viewpoint').map((place) => place.id)
-const tableIds = attractions.filter((place) => place.zone === 'cafe' || place.zone === 'restaurant').map((place) => place.id)
-const legendIds = attractions.filter((place) => place.featured).map((place) => place.id)
-
 export type ProgressInput = { visited: number[]; routesDone: number }
 
 function count(ids: number[], visited: number[]): number {
   return ids.filter((id) => visited.includes(id)).length
 }
 
-export function earnedBadges({ visited, routesDone }: ProgressInput): BadgeId[] {
+export function earnedBadges({ visited, routesDone }: ProgressInput, pool: Attraction[] = attractions): BadgeId[] {
+  const coffeeIds = pool.filter((place) => place.tags.includes('coffee')).map((place) => place.id)
+  const viewIds = pool.filter((place) => place.zone === 'viewpoint').map((place) => place.id)
+  const tableIds = pool.filter((place) => place.zone === 'cafe' || place.zone === 'restaurant').map((place) => place.id)
+  const legendIds = pool.filter((place) => place.featured).map((place) => place.id)
   const rules: Record<BadgeId, boolean> = {
     first: visited.length >= 1,
     five: visited.length >= 5,

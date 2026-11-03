@@ -14,6 +14,7 @@
 - «Compartir» copia un enlace que abre un lugar o la ruta.
 - Filandia queda en el calendario: las fiestas de agosto de 2026 se suspendieron y no hay fecha nueva.
 - Paleta verde y barro. El pasaporte cuenta los lugares imprescindibles.
+- «Mapas» abre Aruba, con su costa, y otro mapa que suma Pereira, Manizales, Sevilla, Caicedonia y Alcalá al Quindío. Cada uno guarda sus sellos. El verde de ese segundo mapa sigue siendo solo el departamento.
 
 ## 0.2.0 — 2026-10-22
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BedDouble, Binoculars, Coffee, Landmark, Moon, Trees, Users, Utensils, type LucideIcon } from 'lucide-react'
-import { municipalities, type Lang, type Taste } from '../data/attractions'
+import type { Lang, Taste } from '../data/attractions'
 import { Avatar } from './Avatar'
 import { characters, type CharacterId } from './characters'
 import { languageList } from '../i18n/languages'
@@ -25,18 +25,19 @@ type Props = {
   guideId: CharacterId
   tastes: Taste[]
   baseTown: string
+  towns: string[]
   talkingId: CharacterId | null
   onLanguage: (lang: Lang) => void
   onPreview: (id: CharacterId) => void
   onDone: (guideId: CharacterId, tastes: Taste[], base: string) => void
 }
 
-export function Onboarding({ lang, startStep, guideId, tastes, baseTown, talkingId, onLanguage, onPreview, onDone }: Props) {
+export function Onboarding({ lang, startStep, guideId, tastes, baseTown, towns, talkingId, onLanguage, onPreview, onDone }: Props) {
   const { t } = useTranslation()
   const [step, setStep] = useState<1 | 2 | 3>(startStep)
   const [picked, setPicked] = useState<CharacterId>(guideId)
   const [likes, setLikes] = useState<Taste[]>(tastes)
-  const [home, setHome] = useState(municipalities.includes(baseTown) ? baseTown : 'Armenia')
+  const [home, setHome] = useState(towns.includes(baseTown) ? baseTown : towns[0])
 
   function toggle(taste: Taste) {
     setLikes((current) => (current.includes(taste) ? current.filter((item) => item !== taste) : [...current, taste]))
@@ -143,7 +144,7 @@ export function Onboarding({ lang, startStep, guideId, tastes, baseTown, talking
             <label className="search">
               <span className="sr-only">{t('base')}</span>
               <select value={home} onChange={(event) => setHome(event.target.value)} aria-label={t('base')}>
-                {municipalities.map((name) => (
+                {towns.map((name) => (
                   <option key={name} value={name}>
                     {name}
                   </option>

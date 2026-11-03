@@ -15,12 +15,13 @@ type Props = {
   xpGain: number
   levelUp: number | null
   badges: BadgeId[]
+  legendName?: string
   onDone: () => void
 }
 
 const colors = ['#0e6b56', '#c45c32', '#e0b03a', '#1c7c8c', '#f7fbf8', '#1d4f91', '#6d3d98']
 
-export function Celebration({ place, number, guide, lang, xpGain, levelUp, badges, onDone }: Props) {
+export function Celebration({ place, number, guide, lang, xpGain, levelUp, badges, legendName, onDone }: Props) {
   const { t } = useTranslation()
   const words = msg(lang)
   const pieces = useMemo(
@@ -91,7 +92,7 @@ export function Celebration({ place, number, guide, lang, xpGain, levelUp, badge
           <p key={id} className="badge-banner">
             <Award size={22} aria-hidden="true" />
             <span>
-              {t('badgeUnlocked')} <strong>{words.badges[id].name}</strong>
+              {t('badgeUnlocked')} <strong>{id === 'legend' && legendName ? legendName : words.badges[id].name}</strong>
             </span>
           </p>
         ))}

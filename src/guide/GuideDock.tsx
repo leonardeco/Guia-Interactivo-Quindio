@@ -65,7 +65,8 @@ type Props = {
   onListen: () => void
   onCloseSelected: () => void
   onAsk: (question: string) => void
-  onCalendar: () => void
+  historyLabel?: string
+  onCalendar?: () => void
   onShare: () => void
   onHeight: (height: number) => void
 }
@@ -348,14 +349,16 @@ export function GuideDock(props: Props) {
             <MapPin size={20} aria-hidden="true" />
             <span>{t('where')}</span>
           </button>
-          <button type="button" className="tool" onClick={props.onPark} aria-label={t('park')} title={t('park')}>
+          <button type="button" className="tool" onClick={props.onPark} aria-label={props.historyLabel ?? t('park')} title={props.historyLabel ?? t('park')}>
             <Landmark size={20} aria-hidden="true" />
-            <span>{t('park')}</span>
+            <span>{props.historyLabel ?? t('park')}</span>
           </button>
-          <button type="button" className="tool" onClick={props.onCalendar} aria-label={t('calendar')} title={t('calendar')}>
-            <CalendarDays size={20} aria-hidden="true" />
-            <span>{t('calendar')}</span>
-          </button>
+          {props.onCalendar && (
+            <button type="button" className="tool" onClick={props.onCalendar} aria-label={t('calendar')} title={t('calendar')}>
+              <CalendarDays size={20} aria-hidden="true" />
+              <span>{t('calendar')}</span>
+            </button>
+          )}
           <button type="button" className="tool" onClick={props.onShare} aria-label={t('share')} title={t('share')}>
             <Share2 size={20} aria-hidden="true" />
             <span>{t('share')}</span>

@@ -4,6 +4,11 @@ import { distanceMeters, type Point } from './geo'
 export const MAX_STOPS = 6
 const CLUSTER = 18000
 
+function townCenter(pool: Attraction[], town: string, fallback: Point): Point {
+  const place = pool.find((item) => item.zone === 'town' && item.town === town)
+  return place ?? townPoint(town) ?? fallback
+}
+
 export function buildRoute(tastes: Taste[], start: Point, pool: Attraction[] = attractions): Attraction[] {
   if (tastes.length === 0) return []
 
@@ -18,18 +23,19 @@ export function buildRoute(tastes: Taste[], start: Point, pool: Attraction[] = a
 
   const weight = new Map<string, number>()
   for (const row of scored) {
-    const hub = townPoint(row.place.town) ?? row.place
+    const hub = townCenter(pool, row.place.town, row.place)
     const distance = distanceMeters(start, hub)
     const next = row.score / (1 + distance / 8000)
     weight.set(row.place.town, (weight.get(row.place.town) ?? 0) + next)
   }
   const hub = [...weight.entries()].sort((a, b) => b[1] - a[1])[0]?.[0]
   if (!hub) return []
-  const hubPoint = townPoint(hub) ?? start
+  const hubPoint = townCenter(pool, hub, start)
   const single = tastes.length === 1
 
+  const span = townPoint(hub) ? CLUSTER : 0
   const nearby = scored
-    .filter(({ place }) => place.town === hub || distanceMeters(hubPoint, place) <= CLUSTER)
+    .filter(({ place }) => place.town === hub || distanceMeters(hubPoint, place) <= span)
     .sort((a, b) => b.score - a.score || a.place.id - b.place.id)
 
   const picked: Attraction[] = []

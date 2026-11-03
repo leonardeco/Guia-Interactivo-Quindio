@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BadgeCheck, BookOpen, Globe, List, Navigation2, Route as RouteIcon, Settings } from 'lucide-react'
+import { BadgeCheck, BookOpen, Globe, List, Map as MapIcon, Navigation2, Route as RouteIcon, Settings } from 'lucide-react'
 import i18n, { msg, readLang } from './i18n'
 import { isLang, languageInfo, languageList, toLang } from './i18n/languages'
 import { ParkMap, type Focus } from './map/ParkMap'
-import { attractions, entrance, essentials, municipalities, townPoint, type Attraction, type Lang, type Taste } from './data/attractions'
+import { type Attraction, type Lang, type Taste } from './data/attractions'
+import { fitWord, historyWord, homePoint, mapsWord, regionById, regionOrder, stampsNote, wholeMap, type RegionId } from './data/regions'
 import { characters, findCharacter, type Character, type CharacterId } from './guide/characters'
 import { useWalker } from './guide/useWalker'
 import { chime, hasVoice, setRateScale, speak, stopSpeaking, unlockAudio, warmVoices, type Mood } from './guide/speech'
 import { buildRoute } from './guide/route'
-import { findArrival, isInsideQuindio, nearestPlaces } from './guide/checkpoint'
+import { findArrival, insideArea, isInsideQuindio, nearestPlaces } from './guide/checkpoint'
 import { answerQuestion } from './guide/ask'
 import { roadLine } from './guide/roads'
 import { findNamed, placeHref, readShare, routeHref } from './guide/link'
@@ -49,9 +50,37 @@ function readGuide(): CharacterId | null {
   return characters.find((item) => item.id === value)?.id ?? null
 }
 
-function readBase(): string {
-  const value = load('qui.base')
-  return value && municipalities.includes(value) ? value : 'Armenia'
+function isRegion(value: string | null): value is RegionId {
+  return value === 'quindio' || value === 'aruba' || value === 'eje'
+}
+
+function readRegionId(): RegionId {
+  try {
+    const fromLink = new URLSearchParams(window.location.search).get('mapa')
+    if (isRegion(fromLink)) return fromLink
+  } catch {
+    // The page is not in a browser yet.
+  }
+  const stored = load('qui.region')
+  return isRegion(stored) ? stored : 'quindio'
+}
+
+function visitKey(id: RegionId) {
+  return id === 'quindio' ? 'qui.visited' : `qui.visited.${id}`
+}
+
+function routesKey(id: RegionId) {
+  return id === 'quindio' ? 'qui.routes' : `qui.routes.${id}`
+}
+
+function baseKey(id: RegionId) {
+  return id === 'quindio' ? 'qui.base' : `qui.base.${id}`
+}
+
+function readBase(id: RegionId = readRegionId()): string {
+  const region = regionById(id)
+  const value = load(baseKey(id))
+  return value && region.towns.includes(value) ? value : region.home
 }
 
 function readList<T>(key: string, allowed: readonly T[]): T[] {
@@ -68,24 +97,29 @@ function readSpeed(): Speed {
   return speeds.find((item) => item === value) ?? 'normal'
 }
 
-const placeIds = attractions.map((place) => place.id)
-
-type SheetName = 'places' | 'passport' | 'settings' | 'language' | 'calendar' | null
+type SheetName = 'places' | 'passport' | 'settings' | 'language' | 'calendar' | 'regions' | null
 type Party = { place: Attraction; n: number; xpGain: number; levelUp: number | null; badges: BadgeId[] }
 
 export function App() {
   const { t } = useTranslation()
   const lang = toLang(i18n.language)
+  const [regionId, setRegionId] = useState<RegionId>(readRegionId)
+  const region = useMemo(() => regionById(regionId), [regionId])
+  const stamps = useMemo(() => region.places.filter((place) => place.featured), [region])
   const [guideId, setGuideId] = useState<CharacterId | null>(readGuide)
   const guide = findCharacter(guideId)
   const [onboarding, setOnboarding] = useState<1 | 2 | 3 | null>(() => (readGuide() ? null : 1))
   const [tastes, setTastes] = useState<Taste[]>(() => readList('qui.tastes', tasteList))
   const [base, setBase] = useState(readBase)
-  const [route, setRoute] = useState<Attraction[]>(() =>
-    readGuide() ? buildRoute(readList('qui.tastes', tasteList), townPoint(readBase()) ?? entrance) : [],
-  )
-  const [visited, setVisited] = useState<number[]>(() => readList('qui.visited', placeIds))
-  const [routesDone, setRoutesDone] = useState(() => Math.max(0, Number(load('qui.routes')) || 0))
+  const [route, setRoute] = useState<Attraction[]>(() => {
+    const opening = regionById(readRegionId())
+    return readGuide() ? buildRoute(readList('qui.tastes', tasteList), homePoint(opening, readBase(opening.id)), opening.places) : []
+  })
+  const [visited, setVisited] = useState<number[]>(() => {
+    const opening = regionById(readRegionId())
+    return readList(visitKey(opening.id), opening.places.map((place) => place.id))
+  })
+  const [routesDone, setRoutesDone] = useState(() => Math.max(0, Number(load(routesKey(readRegionId()))) || 0))
   const [selected, setSelected] = useState<Attraction | null>(null)
   const [target, setTarget] = useState<Attraction | null>(null)
   const [text, setText] = useState('')
@@ -102,7 +136,7 @@ export function App() {
   const [dockOpen, setDockOpen] = useState(true)
   const [dockHeight, setDockHeight] = useState(280)
   const [sheet, setSheet] = useState<SheetName>(null)
-  const walker = useWalker(entrance)
+  const walker = useWalker(homePoint(region, base))
 
   const live = useRef({ lang, voiceOn, guide, autoWalk, route, gps, user, target })
   live.current = { lang, voiceOn, guide, autoWalk, route, gps, user, target }
@@ -123,9 +157,11 @@ export function App() {
     warmVoices()
     if (readGuide()) {
       const share = readShare(window.location.search)
-      if (!share.place && !share.base && share.tastes.length === 0) {
-        const plan = buildRoute(readList('qui.tastes', tasteList), townPoint(readBase()) ?? entrance)
-        setText(`${lines.greeting(stored, findCharacter(readGuide()))} ${lines.startHint(stored, plan.length > 0)}`)
+      if (!share.place && !share.base && share.tastes.length === 0 && !share.map) {
+        const opening = regionById(readRegionId())
+        const plan = buildRoute(readList('qui.tastes', tasteList), homePoint(opening, readBase(opening.id)), opening.places)
+        const hello = opening.story?.[stored] ?? lines.greeting(stored, findCharacter(readGuide()))
+        setText(`${hello} ${lines.startHint(stored, plan.length > 0)}`)
       }
     }
     const unlock = () => unlockAudio()
@@ -140,8 +176,8 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    document.title = msg(lang).appName
-  }, [lang])
+    document.title = region.title?.[lang] ?? msg(lang).appName
+  }, [lang, region])
 
   function later(fn: () => void, ms: number) {
     timers.current.push(window.setTimeout(fn, ms))
@@ -229,15 +265,15 @@ export function App() {
     routesRef.current = after.routesDone
     setVisited(stamps)
     setRoutesDone(after.routesDone)
-    save('qui.visited', JSON.stringify(stamps))
-    save('qui.routes', String(after.routesDone))
+    save(visitKey(region.id), JSON.stringify(stamps))
+    save(routesKey(region.id), String(after.routesDone))
 
     const xpBefore = xpFor(before)
     const xpAfter = xpFor(after)
     const levelBefore = levelFor(xpBefore).level
     const levelAfter = levelFor(xpAfter).level
-    const oldBadges = earnedBadges(before)
-    const newBadges = earnedBadges(after).filter((id) => !oldBadges.includes(id))
+    const oldBadges = earnedBadges(before, region.places)
+    const newBadges = earnedBadges(after, region.places).filter((id) => !oldBadges.includes(id))
 
     stopSpeaking()
     setTalking(false)
@@ -251,7 +287,7 @@ export function App() {
     const words = msg(code)
     const extra = [
       levelAfter > levelBefore ? lines.levelUpLine(code, levelAfter, words.levels[levelAfter - 1]) : '',
-      ...newBadges.map((id) => lines.badgeLine(code, words.badges[id].name)),
+      ...newBadges.map((id) => lines.badgeLine(code, id === 'legend' && region.id !== 'quindio' ? wholeMap[code] : words.badges[id].name)),
     ].filter(Boolean)
     later(
       () => {
@@ -306,7 +342,9 @@ export function App() {
         const point = { lng: position.coords.longitude, lat: position.coords.latitude }
         if (first) {
           first = false
-          if (!isInsideQuindio(point)) {
+          const towns = region.places.filter((place) => place.zone === 'town')
+          const inside = region.id === 'quindio' ? isInsideQuindio(point) : insideArea(point, region.outline, towns)
+          if (!inside) {
             stopGps('outside')
             say(lines.gpsLine(live.current.lang, 'outside'))
             return
@@ -361,13 +399,13 @@ export function App() {
     showOnMap(place, place.reach >= 120 ? 14 : 16)
     chime('tap')
     say(lines.aboutPlace(live.current.lang, place))
-    window.history.replaceState(null, '', placeHref(window.location.href, place.name.es))
+    window.history.replaceState(null, '', placeHref(window.location.href, place.name.es, region.id))
   }
 
   function shareLink() {
     const href = selected
-      ? placeHref(window.location.href, selected.name.es)
-      : routeHref(window.location.href, base, tastes)
+      ? placeHref(window.location.href, selected.name.es, region.id)
+      : routeHref(window.location.href, base, tastes, region.id)
     window.history.replaceState(null, '', href)
     const write = navigator.clipboard?.writeText(href)
     if (!write) {
@@ -382,11 +420,11 @@ export function App() {
 
   function finishOnboarding(id: CharacterId, likes: Taste[], home: string) {
     const chosen = findCharacter(id)
-    const start = townPoint(home) ?? entrance
-    const plan = buildRoute(likes, start)
+    const start = homePoint(region, home)
+    const plan = buildRoute(likes, start, region.places)
     save('qui.guide', id)
     save('qui.tastes', JSON.stringify(likes))
-    save('qui.base', home)
+    save(baseKey(region.id), home)
     setGuideId(id)
     setTastes(likes)
     setBase(home)
@@ -397,12 +435,14 @@ export function App() {
     setSelected(null)
     setTarget(null)
     setDockOpen(true)
-    const parts = [lines.greeting(live.current.lang, chosen)]
+    const hello = region.story?.[live.current.lang] ?? lines.greeting(live.current.lang, chosen)
+    const parts = [hello]
     if (likes.length > 0) parts.push(lines.routeSummary(live.current.lang, plan))
     parts.push(lines.startHint(live.current.lang, plan.length > 0))
     say(parts.join(' '), { as: chosen, mood: 'greet' })
     const first = plan[0]
     showOnMap(first ?? start, first && first.reach >= 120 ? 13 : 15)
+    walker.teleport(start)
   }
 
   function resetProgress() {
@@ -411,9 +451,45 @@ export function App() {
     visitedRef.current = []
     setRoutesDone(0)
     routesRef.current = 0
-    save('qui.visited', '[]')
-    save('qui.routes', '0')
+    save(visitKey(region.id), '[]')
+    save(routesKey(region.id), '0')
     setSheet(null)
+  }
+
+  function chooseRegion(id: RegionId) {
+    if (id === region.id) {
+      setSheet(null)
+      return
+    }
+    save(visitKey(region.id), JSON.stringify(visitedRef.current))
+    save(routesKey(region.id), String(routesRef.current))
+    save(baseKey(region.id), base)
+    save('qui.region', id)
+    const next = regionById(id)
+    const storedBase = load(baseKey(id))
+    const nextBase = storedBase && next.towns.includes(storedBase) ? storedBase : next.home
+    const ids = next.places.map((place) => place.id)
+    const nextVisited = readList(visitKey(id), ids)
+    const done = Math.max(0, Number(load(routesKey(id))) || 0)
+    const start = homePoint(next, nextBase)
+    const plan = buildRoute(tastes, start, next.places)
+    stopGps()
+    setRegionId(id)
+    setBase(nextBase)
+    setVisited(nextVisited)
+    visitedRef.current = nextVisited
+    setRoutesDone(done)
+    routesRef.current = done
+    setRoute(plan)
+    live.current.route = plan
+    setSelected(null)
+    setTarget(null)
+    setSheet(null)
+    walker.teleport(start)
+    walker.stop()
+    setFocus(null)
+    const line = next.story?.[live.current.lang] ?? lines.parkStory(live.current.lang)
+    say(line, { mood: 'explain' })
   }
 
   function openSheet(next: SheetName) {
@@ -434,7 +510,7 @@ export function App() {
     openedLink.current = true
     const share = readShare(window.location.search)
     if (share.place) {
-      const place = findNamed(share.place)
+      const place = findNamed(share.place, region.places)
       if (place) selectPlace(place)
       return () => {
         openedLink.current = false
@@ -445,13 +521,13 @@ export function App() {
         openedLink.current = false
       }
     }
-    const home = share.base && municipalities.includes(share.base) ? share.base : base
+    const home = share.base && region.towns.includes(share.base) ? share.base : base
     const likes = share.tastes.length > 0 ? share.tastes : tastes
-    const start = townPoint(home) ?? entrance
-    const plan = buildRoute(likes, start)
-    if (share.base && municipalities.includes(share.base)) {
+    const start = homePoint(region, home)
+    const plan = buildRoute(likes, start, region.places)
+    if (share.base && region.towns.includes(share.base)) {
       setBase(home)
-      save('qui.base', home)
+      save(baseKey(region.id), home)
     }
     if (share.tastes.length > 0) {
       setTastes(likes)
@@ -488,16 +564,16 @@ export function App() {
   const progress = { visited, routesDone }
   const xp = xpFor(progress)
   const level = levelFor(xp)
-  const badges = earnedBadges(progress)
+  const badges = earnedBadges(progress, region.places)
   const heading = target ?? next
   const headingMeters = heading ? lines.formatDistance(lang, distanceMeters(position, heading)) : ''
-  const essentialGot = essentials.filter((place) => visited.includes(place.id)).length
+  const essentialGot = stamps.filter((place) => visited.includes(place.id)).length
   const headingAngle = heading ? bearingDeg(position, heading) : 0
 
   return (
     <div className="app">
       <header className="topbar">
-        <h1>{t('appName')}</h1>
+        <h1>{region.title?.[lang] ?? t('appName')}</h1>
         <button type="button" className="level-chip" onClick={() => openSheet('passport')} aria-label={`${t('passport')}: ${t('level', { n: level.level })}, ${t('xp', { n: xp })}`}>
           <span className="level-num">{level.level}</span>
           <span className="level-xp">
@@ -508,6 +584,9 @@ export function App() {
           </span>
         </button>
         <nav className="topbar-actions">
+          <button type="button" className="top-btn" onClick={() => openSheet('regions')} aria-label={mapsWord[lang]} title={mapsWord[lang]}>
+            <MapIcon size={20} aria-hidden="true" />
+          </button>
           <button type="button" className="top-btn" onClick={() => openSheet('places')} aria-label={t('places')} title={t('places')}>
             <List size={20} aria-hidden="true" />
           </button>
@@ -523,7 +602,7 @@ export function App() {
           </button>
         </nav>
       </header>
-      <main className="map-frame" aria-label={t('map')}>
+      <main className="map-frame" aria-label={region.title?.[lang] ?? t('map')}>
         <ParkMap
           lang={lang}
           loadingText={t('loading')}
@@ -538,13 +617,16 @@ export function App() {
           selectedId={selected?.id ?? null}
           focus={focus}
           bottomPadding={onboarding === null && dockOpen ? dockHeight : 40}
+          places={region.places}
+          outline={region.outline}
+          fitLabel={region.id === 'quindio' ? undefined : fitWord[lang]}
           onSelect={selectPlace}
         />
 
         <div className="hud">
-          <button type="button" className="hud-chip" onClick={() => openSheet('passport')} aria-label={`${t('stamps')}: ${essentialGot}/${essentials.length}`}>
+          <button type="button" className="hud-chip" onClick={() => openSheet('passport')} aria-label={`${t('stamps')}: ${essentialGot}/${stamps.length}`}>
             <BadgeCheck size={18} aria-hidden="true" />
-            {essentialGot}/{essentials.length}
+            {essentialGot}/{stamps.length}
           </button>
           {route.length > 0 && (
             <span className="hud-chip hud-chip--route">
@@ -610,13 +692,15 @@ export function App() {
               setSelected(null)
               const point = here()
               showOnMap(point)
-              say(lines.whereAmI(live.current.lang, nearestPlaces(point, 3)), { mood: 'point' })
+              say(lines.whereAmI(live.current.lang, nearestPlaces(point, 3, region.places)), { mood: 'point' })
             }}
             onPark={() => {
               setSelected(null)
-              say(lines.parkStory(live.current.lang), { mood: 'explain' })
+              const line = region.story?.[live.current.lang] ?? lines.parkStory(live.current.lang)
+              say(line, { mood: 'explain' })
             }}
-            onCalendar={() => openSheet('calendar')}
+            historyLabel={region.story ? historyWord[lang] : undefined}
+            onCalendar={region.calendar ? () => openSheet('calendar') : undefined}
             onShare={shareLink}
             onLocate={() => (gps === 'on' || gps === 'searching' ? stopGps() : startGps())}
             onRepeat={() => say(text)}
@@ -646,7 +730,11 @@ export function App() {
             onListen={() => selected && say(lines.aboutPlace(live.current.lang, selected))}
             onCloseSelected={() => setSelected(null)}
             onAsk={(question) => {
-              const answer = answerQuestion(question, live.current.lang, here(), tastes)
+              const answer = answerQuestion(question, live.current.lang, here(), tastes, {
+                places: region.places,
+                towns: region.towns,
+                story: region.story?.[live.current.lang],
+              })
               if (answer.place) {
                 setSelected(answer.place)
                 setDockOpen(true)
@@ -661,12 +749,13 @@ export function App() {
 
       {onboarding !== null && (
         <Onboarding
-          key={onboarding}
+          key={`${onboarding}-${region.id}`}
           lang={lang}
           startStep={onboarding}
           guideId={guideId ?? 'camila'}
           tastes={tastes}
           baseTown={base}
+          towns={region.towns}
           talkingId={talking ? previewId : null}
           onLanguage={onLanguage}
           onPreview={(id) => {
@@ -686,6 +775,7 @@ export function App() {
           here={position}
           visited={visited}
           route={route.map((stop) => stop.id)}
+          places={region.places}
           onPick={(place) => {
             setSheet(null)
             selectPlace(place)
@@ -700,12 +790,38 @@ export function App() {
           xp={xp}
           visited={visited}
           badges={badges}
+          stamps={stamps}
+          legendName={region.id === 'quindio' ? undefined : wholeMap[lang]}
           onPick={(place) => {
             setSheet(null)
             selectPlace(place)
           }}
           onClose={closeSheet}
         />
+      )}
+
+      {sheet === 'regions' && (
+        <Sheet title={mapsWord[lang]} closeLabel={t('close')} onClose={closeSheet}>
+          <p className="sheet-note">{stampsNote[lang]}</p>
+          <div className="lang-grid lang-grid--sheet" role="listbox" aria-label={mapsWord[lang]}>
+            {regionOrder.map((id) => {
+              const item = regionById(id)
+              const label = item.title?.[lang] ?? t('appName')
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="option"
+                  aria-selected={region.id === id}
+                  className={`lang-option${region.id === id ? ' is-on' : ''}`}
+                  onClick={() => chooseRegion(id)}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        </Sheet>
       )}
 
       {sheet === 'language' && (
@@ -777,6 +893,7 @@ export function App() {
           xpGain={party.xpGain}
           levelUp={party.levelUp}
           badges={party.badges}
+          legendName={region.id === 'quindio' ? undefined : wholeMap[lang]}
           onDone={closeCelebration}
         />
       )}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" role="img" aria-label="Abrir la guía">
+  <rect width="280" height="64" rx="32" fill="#0E6B56"/>
+  <rect x="3" y="3" width="274" height="58" rx="29" fill="none" stroke="#ffe08a" stroke-width="2"/>
+  <text x="140" y="41" text-anchor="middle" fill="#f7f3ea" font-family="Georgia, 'Times New Roman', serif" font-size="24">Abrir la guía</text>
+</svg>

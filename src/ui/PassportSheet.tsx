@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Award, Lock } from 'lucide-react'
-import { essentials, zoneColor, type Attraction, type Lang } from '../data/attractions'
+import { zoneColor, type Attraction, type Lang } from '../data/attractions'
 import { badgeOrder, levelFor, type BadgeId } from '../game/progress'
 import { msg } from '../i18n'
 import { Sheet } from './Sheet'
@@ -11,11 +11,13 @@ type Props = {
   xp: number
   visited: number[]
   badges: BadgeId[]
+  stamps: Attraction[]
+  legendName?: string
   onPick: (place: Attraction) => void
   onClose: () => void
 }
 
-export function PassportSheet({ lang, xp, visited, badges, onPick, onClose }: Props) {
+export function PassportSheet({ lang, xp, visited, badges, stamps, legendName, onPick, onClose }: Props) {
   const { t } = useTranslation()
   const level = levelFor(xp)
   const words = msg(lang)
@@ -47,7 +49,7 @@ export function PassportSheet({ lang, xp, visited, badges, onPick, onClose }: Pr
               <span className="badge-icon" aria-hidden="true">
                 {got ? <Award size={26} /> : <Lock size={20} />}
               </span>
-              <strong>{words.badges[id].name}</strong>
+              <strong>{id === 'legend' && legendName ? legendName : words.badges[id].name}</strong>
               <small>{words.badges[id].desc}</small>
             </li>
           )
@@ -55,10 +57,10 @@ export function PassportSheet({ lang, xp, visited, badges, onPick, onClose }: Pr
       </ul>
 
       <h3 className="sheet-sub">
-        {t('stamps')} · {essentials.filter((place) => visited.includes(place.id)).length}/{essentials.length}
+        {t('stamps')} · {stamps.filter((place) => visited.includes(place.id)).length}/{stamps.length}
       </h3>
       <ul className="stamp-grid">
-        {essentials.map((place) => {
+        {stamps.map((place) => {
           const got = visited.includes(place.id)
           return (
             <li key={place.id}>

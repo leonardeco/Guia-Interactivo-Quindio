@@ -127,9 +127,9 @@ const listLine = col([
   '{{where}}에서는 {{list}}을 권합니다.',
 ])
 
-function sameName(place: Attraction, zone: Zone): Attraction | null {
+function sameName(place: Attraction, zone: Zone, pool: Attraction[]): Attraction | null {
   const name = normalize(place.name.es)
-  return attractions.find((item) => item.zone === zone && normalize(item.name.es) === name) ?? null
+  return pool.find((item) => item.zone === zone && normalize(item.name.es) === name) ?? null
 }
 
 function tokenLength(question: string, place: Attraction): number {
@@ -139,8 +139,8 @@ function tokenLength(question: string, place: Attraction): number {
   }, 0)
 }
 
-function matchPlace(question: string): Attraction | null {
-  const ranked = attractions
+function matchPlace(question: string, pool: Attraction[]): Attraction | null {
+  const ranked = pool
     .map((place) => {
       const name = normalize(place.name.es)
       let score = 0
@@ -166,28 +166,36 @@ function matchZone(question: string): Zone | null {
   return null
 }
 
-export function answerQuestion(question: string, lang: Lang, here: Point, tastes: Taste[]): { text: string; place: Attraction | null } {
+export function answerQuestion(
+  question: string,
+  lang: Lang,
+  here: Point,
+  tastes: Taste[],
+  scope?: { places: Attraction[]; towns: string[]; story?: string | null },
+): { text: string; place: Attraction | null } {
+  const pool = scope?.places ?? attractions
+  const towns = scope?.towns ?? municipalities
   const q = normalize(question)
   if (!q) return { text: help[lang], place: null }
-  const place = matchPlace(q)
+  const place = matchPlace(q, pool)
   const wantsHistory = historyWords.some((word) => q.includes(normalize(word)))
   if (wantsHistory && place) {
     if (place.historic) return { text: place.info[lang], place }
     const blurb = place.info[lang]
     return { text: none[lang].replace('{{name}}', place.name[lang]).replace('{{blurb}}', blurb), place }
   }
-  if (wantsHistory) return { text: regionHistory(lang), place: null }
+  if (wantsHistory) return { text: scope?.story || regionHistory(lang), place: null }
 
   const zone = matchZone(q)
   const named = place && normalize(place.name.es).length >= 4 && q.includes(normalize(place.name.es))
-  const picked = named && zone && place.zone !== zone ? (sameName(place, zone) ?? place) : place
+  const picked = named && zone && place.zone !== zone ? (sameName(place, zone, pool) ?? place) : place
   if (named && picked) return { text: picked.info[lang], place: picked }
 
-  const town = municipalities.find((name) => q.includes(normalize(name)))
+  const town = towns.find((name) => q.includes(normalize(name)))
   const token = place ? tokenLength(q, place) : 0
   const tokenIsTown = Boolean(town && token === normalize(town).length)
   if (zone && (token < 6 || tokenIsTown)) {
-    const ranked = attractions
+    const ranked = pool
       .filter((item) => item.zone === zone && (!town || item.town === town))
       .map((item) => ({ item, distance: distanceMeters(here, item) }))
       .sort((a, b) => a.distance - b.distance)
@@ -205,7 +213,7 @@ export function answerQuestion(question: string, lang: Lang, here: Point, tastes
   }
 
   if (recommendWords.some((word) => q.includes(normalize(word)))) {
-    const plan = buildRoute(tastes.length > 0 ? tastes : ['towns', 'nature', 'coffee', 'food'], here)
+    const plan = buildRoute(tastes.length > 0 ? tastes : ['towns', 'nature', 'coffee', 'food'], here, pool)
     return { text: routeSummary(lang, plan), place: plan[0] ?? null }
   }
 

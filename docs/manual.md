@@ -39,6 +39,8 @@ Cada pin abre la ficha del lugar: nombre, pueblo, distancia y lo que el guía di
 
 Al valle del Cocora no se llega caminando desde Armenia. El jeep sale de la plaza de Salento. El aeropuerto queda en La Tebaida, a unos 18 km de Armenia.
 
+El botón «Mapas», arriba, cambia de mapa. Quindío es el de esta guía. Aruba es la isla, con la costa, sus pueblos y sus sellos aparte; ahí el encuadre dice «Ver todo» y no hay calendario de fiestas. «Quindío y vecinos» deja estos lugares y suma Pereira, Manizales y tres pueblos del norte del Valle: Sevilla, Caicedonia y Alcalá. El verde sigue siendo solo el departamento. No hay línea del eje cafetero ni de Los Nevados. Cada mapa guarda sus sellos. La ruta de un día no salta de Pereira a Armenia, ni de una de esas ciudades a otra.
+
 ## 3. La ruta
 
 Con gustos elegidos, la ruta tiene como máximo 6 paradas y se queda en una zona, cerca del pueblo de salida.
@@ -56,7 +58,7 @@ Hay dos maneras de marcar el sello.
 - **Yendo hacia él.** «Ir allí» o «Siguiente parada» deja ese lugar como destino. Con «Ubícame» prendido, el sello se marca al estar ahí. Si el GPS está apagado, el guía camina por el mapa y marca el sello al llegar.
 - **Ya estando ahí.** En la ficha, «Llegué» marca el sello sin esperar al GPS.
 
-«Ubícame» solo sigue dentro del Quindío. Si el teléfono está fuera, lo dice y no sigue. Pasar cerca de un café que no es el destino no marca sello.
+«Ubícame» sigue dentro del mapa que está abierto. Si el teléfono está fuera, lo dice y no sigue. Pasar cerca de un café que no es el destino no marca sello.
 
 La ubicación no se envía a ningún servidor. Queda en el teléfono, y solo mientras la app está abierta.
 
@@ -123,7 +125,7 @@ Sin conexión solo funciona lo que ya se abrió, o la vista guardada con el bot�
 - La lista de hospedaje sale del mapa público. El filtro «Hospedaje» agrupa fincas, hostales, apartamentos y camping. Varios se reservan también por Airbnb; la guía no se conecta con esa plataforma.
 - El clima es una lectura de Open-Meteo, no un pronóstico de la alcaldía. El uso libre de ese servicio es no comercial.
 - La línea de la ruta es la vía principal cuando hay red. No es un navegador paso a paso.
-- No sigue el GPS fuera del Quindío.
+- En el mapa del Quindío, «Ubícame» solo sigue dentro del departamento. En Aruba sigue dentro de la isla. En el de vecinos también sigue cerca de Pereira, Manizales, Sevilla, Caicedonia o Alcalá. Fuera de eso lo dice y no sigue.
 - No crea una cuenta ni guarda la visita en un servidor.
 
 ## 11. Para quien la publica
