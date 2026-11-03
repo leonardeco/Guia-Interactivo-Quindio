@@ -1,0 +1,14 @@
+node_modules
+dist
+*.local
+*.tsbuildinfo
+.DS_Store
+_osm_fetch.py
+_osm_pois.py
+_park_ring.json
+_pois.json
+_hydraia_config.sh
+_map_preview.png
+.vercel
+.claude/
+.codegraph/

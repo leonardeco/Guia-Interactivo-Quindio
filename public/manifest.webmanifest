@@ -1,0 +1,21 @@
+{
+  "name": "Mapa del Quindío",
+  "short_name": "Quindío",
+  "description": "Guía interactivo del Quindío con mapa, rutas, voz y pasaporte de sellos en 25 idiomas.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E7F2EC",
+  "theme_color": "#0E6B56",
+  "categories": ["travel", "navigation"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

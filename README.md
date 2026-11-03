@@ -1,70 +1,66 @@
 # Guía interactivo del Quindío
 
-Mapa para recorrer el Quindío desde el celular. Cubre los doce municipios: hospedaje, comida, cafés, parques, miradores, rumba y sitios concurridos. Un guía animado arma una ruta corta, cuenta la historia del departamento y la del lugar cuando hay un hecho público, y va marcando sellos en un pasaporte.
+El departamento, en el celular. Doce municipios, un guía que camina con el visitante, una ruta corta y un pasaporte de sellos. Sirve para quien llega de paso y para quien quiere armar el día: pueblos, café, naturaleza, comida, miradores, rumba y dónde dormir.
 
-Funciona en pantallas desde 320 px, en vertical y en horizontal, y se puede instalar en la pantalla de inicio.
+Se abre en el navegador, se puede dejar en la pantalla de inicio y habla en 25 idiomas. El árabe se lee de derecha a izquierda. La primera vez usa el idioma del teléfono.
 
-## Cómo se recorre
+El paso a paso está en el [manual](docs/manual.md).
 
-1. En la primera visita se elige idioma, guía, gustos y el pueblo de salida. También se puede entrar a mirar el mapa sin armar ruta.
-2. El mapa abre encuadrado en todo el departamento.
-3. Con gustos elegidos, la ruta se queda en una zona: hasta 6 paradas, sin cruzar el Quindío de punta a punta.
-4. «Siguiente parada» lleva al guía caminando. «Ubícame» sigue al visitante y marca el sello al llegar.
-5. Al llegar hay sello, puntos y, si toca, un nivel o una medalla.
-6. En el cuadro de pregunta se puede pedir un lugar, la historia o qué ver cerca.
+## Qué se lleva el visitante
 
-## Municipios
+- Un mapa de todo el Quindío, no de un solo parque.
+- Seis guías. Cada uno tiene un oficio: naturaleza, ciudad, mesa, montaña, pueblos u hospedaje.
+- Una ruta de hasta 6 paradas, cerca del pueblo de salida. No atraviesa el departamento de punta a punta.
+- Historia del Quindío, y la del lugar cuando hay un hecho público. Si no la hay, el guía dice qué es el sitio y en qué pueblo queda.
+- Un pasaporte: sellos, puntos y medallas. El progreso queda en ese teléfono.
+
+## Los doce municipios
 
 Armenia, Buenavista, Calarcá, Circasia, Córdoba, Filandia, Génova, La Tebaida, Montenegro, Pijao, Quimbaya y Salento.
 
-## Mapa
+## Los guías
 
-Los lugares salen de OpenStreetMap y se dibujan con MapLibre. El estilo es Liberty, de OpenFreeMap. Si ese estilo no carga, el mapa pasa a los mosaicos de OpenStreetMap. Si tampoco cargan, queda un aviso y el guía sigue hablando.
-
-De lejos se ven pueblos, parques, miradores y lugares destacados. Al acercarse aparecen hoteles, restaurantes y cafés. Hay filtros por tipo. La parada de la ruta, el lugar elegido y la siguiente parada se quedan visibles aunque el zoom los esconda.
-
-El buscador ignora las tildes: `jardin botanico` encuentra el Jardín Botánico del Quindío.
-
-## Guía y voz
-
-Hay seis guías: Camila, Santiago, Lucía, Mateo, Valentina y Andrés. Caminan por el mapa, saludan, señalan y mueven la boca con lo que dicen.
-
-La voz intenta primero un audio neuronal, sin clave. Si ese servicio no responde, habla con la voz del teléfono. Se puede bajar o subir la velocidad, silenciar, y el texto queda en pantalla. Si el teléfono no tiene voz para el idioma, se ve el texto y la boca se mueve igual.
-
-La historia entra cuando el lugar la tiene: fundación de un pueblo, el departamento en 1966, el sismo de 1999, el Paisaje Cultural Cafetero, el Parque Nacional del Café y algunos sitios con nombre propio. Si no hay historia registrada, el guía dice qué es el sitio y en qué pueblo queda.
-
-## Idiomas
-
-Español, English, Português, Français, Deutsch, Italiano, Nederlands, Català, Svenska, Dansk, Norsk, Polski, Čeština, Română, Magyar, Ελληνικά, Türkçe, Русский, Українська, العربية, हिन्दी, Indonesia, 中文, 日本語 y 한국어.
-
-La primera visita usa el idioma del teléfono. Si ese idioma no está, abre en español. El árabe va de derecha a izquierda. Se cambia con el globo o en Ajustes.
-
-## Pasaporte
-
-Cada lugar nuevo deja un sello. Los imprescindibles son la meta del pasaporte. Hay puntos de experiencia, 7 niveles (de Visitante a Embajador del Quindío) y 8 medallas. Todo eso queda guardado en el navegador de ese teléfono.
-
-## De dónde salen los datos
-
-| Qué | Origen |
+| Guía | Se encarga de |
 | --- | --- |
-| Lugares y contorno | OpenStreetMap |
-| Hospedaje | Lo que el mapa marca como hotel, finca, hostal, apartamento o camping |
-| Historia | Hechos públicos. Si un sitio no tiene fecha conocida, no se le pone una |
-| Nombres en otros idiomas | El nombre del mapa se deja igual. Lo que se traduce es la interfaz, el guía y la historia |
+| Camila | Naturaleza: palmas, miradores y pueblos |
+| Santiago | Ciudad y rumba |
+| Lucía | La mesa: restaurantes y cafés |
+| Mateo | Montaña y caminos |
+| Valentina | Pueblos y su historia |
+| Andrés | Dónde dormir |
 
-Varios hospedajes también se reservan por Airbnb. Esta app no se conecta con Airbnb: la lista es la del mapa.
+Se elige uno al entrar. Se puede cambiar después, en Ajustes.
 
-Horarios, nombres y si un negocio sigue abierto pueden cambiar. Conviene confirmar antes de ir.
+## Cómo se recorre
+
+1. Idioma, guía, gustos y pueblo de salida. También se puede mirar el mapa sin armar ruta.
+2. El mapa abre con todo el departamento. De lejos se ven pueblos, parques, miradores, lugares concurridos y las llegadas: el aeropuerto El Edén, en La Tebaida, y la terminal de Armenia. Al acercarse aparecen hoteles, restaurantes y cafés. «3D» inclina el mapa y muestra el relieve.
+3. «Siguiente parada» lleva al guía. Si hay red, la línea sigue las vías principales. Si no, queda una guía en línea recta y el guía lo dice. «Ubícame» sigue al visitante. El sello se marca al llegar al lugar al que iba, o con el botón «Llegué».
+4. En el cuadro se le pregunta, escribiendo o con el micrófono: la historia de un pueblo, dónde comer, dónde dormir o qué ver. «Calendario» reúne las fiestas con fecha pública y pide confirmarlas en la alcaldía.
+
+Ejemplos que entiende: `historia de Salento`, `dónde comer`, `hotel en Armenia`, `qué ver`.
+
+## Sellos
+
+Cada lugar nuevo deja un sello. La meta del pasaporte son los pueblos y los sitios con historia escrita, no cada hotel ni cada restaurante.
+
+Los niveles van de Visitante a Embajador del Quindío. Las medallas premian el primer sello, cinco y diez visitas, el café, los miradores, la mesa, una ruta terminada y el recorrido de los imprescindibles.
+
+## De dónde sale lo que se cuenta
+
+Los lugares y el contorno salen de OpenStreetMap. El hospedaje es el que el mapa marca como hotel, finca, hostal, apartamento o camping. El filtro se llama Hospedaje. Varios también se reservan por Airbnb; esta guía no reserva ni se conecta con esa plataforma.
+
+La historia se cuenta solo donde hay un hecho público: la fundación de un pueblo, el departamento en 1966, el sismo de 1999, el Paisaje Cultural Cafetero y sitios como el Parque Nacional del Café, el valle del Cocora o el Museo del Oro Quimbaya. El paisaje es Patrimonio Mundial desde 2011. La lista oficial cubre 11 de los 12 municipios; La Tebaida no está en esa lista, aunque sí está en el departamento y ahí queda el aeropuerto. Un negocio sin fecha no recibe una inventada.
+
+En la ficha de un pueblo aparecen las fiestas que ya tienen fecha pública, con la nota de confirmar en la alcaldía. El clima de la ficha sale de Open-Meteo: temperatura y si llueve o no. Las fotos, cuando hay, son de Wikimedia Commons y llevan el crédito. Salento, Filandia, el valle del Cocora y el Parque Nacional del Café tienen foto. El resto no, para no inventar una imagen.
+
+Nombres y horarios cambian. Conviene confirmar antes de ir. La ficha enlaza la página oficial del Paisaje Cultural Cafetero y quindiocorazondecolombia.com.
 
 ## Privacidad
 
-- La ubicación se usa solo en el teléfono. No se guarda ni se envía a ningún servidor.
-- El GPS solo sigue al visitante dentro del Quindío.
-- Idioma, guía, gustos, pueblo de salida, sellos y rutas completadas quedan en el `localStorage` del navegador.
-- El texto que se lee en voz alta sale del teléfono únicamente mientras el guía habla. No hay cuenta ni historial.
-- Los servidores de mapas reciben la petición de los mosaicos del área que se está mirando.
+La ubicación no sale del teléfono y el GPS solo sigue dentro del Quindío. Idioma, guía, gustos, pueblo de salida y sellos quedan en el navegador. No hay cuenta. El texto de la voz sale del teléfono solo mientras el guía habla.
 
-## Correrla en local
+## Correrla
 
 Hace falta Node.js 20 o superior.
 
@@ -77,15 +73,13 @@ Abre en `http://localhost:5173`.
 
 | Comando | Qué hace |
 | --- | --- |
-| `npm test` | Pruebas con Vitest |
-| `npm run build` | Revisa TypeScript y deja la app en `dist/` |
-| `npm run preview` | Sirve lo que quedó en `dist/` |
+| `npm test` | Pruebas |
+| `npm run build` | Deja la app en `dist/` |
+| `npm run preview` | Muestra ese resultado |
 
-En producción, el service worker guarda la app y los mosaicos que ya se vieron. No descarga el mapa entero por adelantado.
+En el build de producción, lo ya visto queda disponible sin conexión. El botón de descarga en el mapa guarda la vista actual, no el departamento entero. En desarrollo ese guardado no queda para después: el modo local no usa el servicio que guarda los mosaicos.
 
-## Publicarla
-
-`vercel.json` compila con `npm run build`, publica `dist/` y define la caché: el service worker no se cachea; los assets con hash, un año. La voz neuronal entra por `api/tts`. En local la atiende el mismo servidor de `npm run dev`.
+`vercel.json` publica `dist/`. La voz neuronal, si el servicio responde, entra por `api/tts`. Si no responde, habla la voz del teléfono.
 
 ```bash
 npx vercel --prod
@@ -93,44 +87,22 @@ npx vercel --prod
 
 ## Cómo está armada
 
-React 19, TypeScript y Vite 7. El mapa es MapLibre GL JS. Los textos de la interfaz pasan por i18next. No hay backend propio, salvo la ruta de voz al publicar.
+React 19, TypeScript y Vite 7. El mapa es MapLibre, con el estilo Liberty de OpenFreeMap y mosaicos de OpenStreetMap si ese estilo falla.
 
 ```
-src/
-  App.tsx                  Recorrido: estado, voz, GPS, progreso y paneles
-  data/
-    attractions.ts         Catálogo, pueblos y colores
-    catalog.json           Lugares de partida
-    history.ts             Historia del departamento y de los lugares que la tienen
-    blurb.ts               Texto corto cuando no hay historia
-    boundary.json          Contorno del Quindío
-  game/progress.ts         Puntos, niveles y medallas
-  guide/
-    Avatar.tsx             Guía dibujado
-    speech.ts              Voz neuronal y voz del teléfono
-    lines.ts               Lo que dice el guía
-    characters.ts          Los seis guías
-    ask.ts                 Preguntas
-    route.ts               Ruta por gustos y pueblo
-    checkpoint.ts          Llegada por GPS
-  i18n/
-    languages.ts           Idiomas y etiquetas del mapa
-    messages.ts            Textos de la interfaz
-  map/ParkMap.tsx          Mapa, pines, ruta y filtros
-public/
-  sw.js                    Service worker
-  manifest.webmanifest     Instalación como app
-api/tts.ts                 Voz en el despliegue
-server/tts.ts              La misma voz, en desarrollo
+src/App.tsx            Recorrido, voz, GPS y paneles
+src/data/              Lugares, historia y contorno
+src/guide/             Guías, voz, ruta, preguntas y llegada
+src/i18n/              25 idiomas
+src/map/ParkMap.tsx    Mapa, pines y filtros
+src/game/progress.ts   Puntos, niveles y medallas
+public/                Instalación y uso sin conexión
+api/tts.ts             Voz al publicar
+server/tts.ts          La misma voz, en local
 ```
 
-El detalle está en `docs/`:
-
-- [Arquitectura](docs/arquitectura.md)
-- [Voz y avatares](docs/voz-y-avatares.md)
-- [Idiomas](docs/idiomas.md)
-- [Cambios](docs/CHANGELOG.md)
+Más detalle para quien mantiene el código: [arquitectura](docs/arquitectura.md), [voz y avatares](docs/voz-y-avatares.md), [idiomas](docs/idiomas.md), [cambios](docs/CHANGELOG.md).
 
 ## Créditos
 
-Mapa © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright). Estilo [OpenFreeMap](https://openfreemap.org/) Liberty. Motor [MapLibre GL JS](https://maplibre.org/). Iconos de [Lucide](https://lucide.dev/). Fredoka y Public Sans, de Google Fonts. El resto de escrituras usa las fuentes del sistema.
+Mapa © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright). Estilo [OpenFreeMap](https://openfreemap.org/) Liberty. Motor [MapLibre GL JS](https://maplibre.org/). Iconos de [Lucide](https://lucide.dev/). Fredoka y Public Sans, de Google Fonts.

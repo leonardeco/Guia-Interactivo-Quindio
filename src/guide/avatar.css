@@ -1,0 +1,649 @@
+.avatar {
+  --gx: 0px;
+  --gy: 0px;
+  display: block;
+  overflow: visible;
+  transition: transform 220ms ease;
+}
+
+.avatar g {
+  transform-box: view-box;
+}
+
+.avatar--left {
+  transform: scaleX(-1);
+}
+
+/* ---------- Face ---------- */
+
+.av-pupils {
+  transform: translate(var(--gx), var(--gy));
+  transition: transform 180ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.av-lids {
+  transform: scaleY(0);
+  transition: transform 60ms ease-in;
+}
+
+.avatar.is-blink .av-lids {
+  transform: scaleY(1);
+}
+
+.av-brows {
+  transition: transform 220ms ease;
+}
+
+.avatar.is-brows-up .av-brows {
+  transform: translateY(-3.5px);
+}
+
+.av-v {
+  display: none;
+}
+
+.avatar:not([data-viseme]) .av-v-rest,
+.avatar[data-viseme='rest'] .av-v-rest,
+.avatar[data-viseme='M'] .av-v-M,
+.avatar[data-viseme='A'] .av-v-A,
+.avatar[data-viseme='E'] .av-v-E,
+.avatar[data-viseme='O'] .av-v-O,
+.avatar[data-viseme='U'] .av-v-U {
+  display: inline;
+}
+
+.avatar[data-viseme='A'] .av-stache,
+.avatar[data-viseme='O'] .av-stache {
+  transform: translateY(-1.5px);
+}
+
+.avatar[data-viseme='A'] .av-beard,
+.avatar[data-viseme='O'] .av-beard {
+  transform: translateY(2px);
+}
+
+.av-stache,
+.av-beard {
+  transition: transform 70ms ease;
+}
+
+.avatar--cheer .av-v {
+  display: none !important;
+}
+
+.avatar--cheer .av-v-A {
+  display: inline !important;
+}
+
+.avatar--cheer .av-lids {
+  transform: scaleY(0) !important;
+}
+
+/* ---------- Limbs (rest pose transitions) ---------- */
+
+.av-arm,
+.av-fore,
+.av-hand,
+.av-head,
+.av-leg,
+.av-shin,
+.av-foot,
+.av-torso {
+  transition: transform 320ms cubic-bezier(0.3, 0.8, 0.4, 1);
+}
+
+.av-arm-front {
+  transform: rotate(-6deg);
+}
+
+.av-arm-back {
+  transform: rotate(6deg);
+}
+
+.av-arm-front .av-fore {
+  transform: rotate(-8deg);
+}
+
+.av-arm-back .av-fore {
+  transform: rotate(6deg);
+}
+
+/* ---------- Idle ---------- */
+
+.avatar--idle .av-body,
+.avatar--talk .av-body {
+  animation: av-breathe 3.4s ease-in-out infinite;
+}
+
+.avatar--idle .av-arm-front {
+  animation: av-idle-arm 3.4s ease-in-out infinite;
+}
+
+.avatar--idle .av-head {
+  animation: av-idle-head 6s ease-in-out infinite;
+}
+
+.avatar--idle .av-skirt {
+  animation: av-skirt 3.4s ease-in-out infinite;
+}
+
+/* ---------- Talking ---------- */
+
+.avatar--talk .av-head {
+  animation: av-nod 1.5s ease-in-out infinite;
+}
+
+.avatar--talk .av-arm-front {
+  animation: av-explain-arm 1.6s ease-in-out infinite alternate;
+}
+
+.avatar--talk .av-arm-front .av-fore {
+  animation: av-explain-fore 0.8s ease-in-out infinite alternate;
+}
+
+.avatar--talk .av-arm-front .av-hand {
+  animation: av-hand-turn 0.8s ease-in-out infinite alternate;
+}
+
+.avatar--talk .av-arm-back {
+  animation: av-back-arm 2.4s ease-in-out infinite alternate;
+}
+
+/* Gestures chosen per sentence (data-gesture is set by useAvatarLife). */
+
+.avatar--talk[data-gesture='wave'] .av-arm-front {
+  animation: none;
+  transform: rotate(-160deg);
+}
+
+.avatar--talk[data-gesture='wave'] .av-arm-front .av-fore {
+  animation: av-wave 0.32s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='point'] .av-arm-front {
+  animation: av-point-arm 1.2s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='point'] .av-arm-front .av-fore {
+  animation: none;
+  transform: rotate(-14deg);
+}
+
+.avatar--talk[data-gesture='point'] .av-head {
+  animation: av-look-ahead 1.2s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='open'] .av-arm-front {
+  animation: av-open-front 1.1s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='open'] .av-arm-front .av-fore {
+  animation: none;
+  transform: rotate(-36deg);
+}
+
+.avatar--talk[data-gesture='open'] .av-arm-back {
+  animation: av-open-back 1.1s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='open'] .av-arm-back .av-fore {
+  transform: rotate(36deg);
+}
+
+.avatar--talk[data-gesture='think'] .av-arm-front {
+  animation: none;
+  transform: rotate(-26deg);
+}
+
+.avatar--talk[data-gesture='think'] .av-arm-front .av-fore {
+  animation: none;
+  transform: rotate(-138deg);
+}
+
+.avatar--talk[data-gesture='think'] .av-arm-front .av-hand {
+  animation: av-tap 0.5s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='think'] .av-head {
+  animation: none;
+  transform: rotate(-6deg);
+}
+
+.avatar--talk[data-gesture='celebrate'] .av-arm-front {
+  animation: av-celebrate-front 0.45s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='celebrate'] .av-arm-back {
+  animation: av-celebrate-back 0.45s ease-in-out infinite alternate;
+}
+
+.avatar--talk[data-gesture='celebrate'] .av-figure {
+  animation: av-jump 0.9s ease-in-out 2;
+}
+
+/* ---------- Walking ---------- */
+
+.avatar--walk .av-face {
+  transform: translateX(4px);
+}
+
+.avatar--walk .av-head {
+  transform: rotate(3deg);
+}
+
+.avatar--walk .av-body {
+  animation: av-bob 0.36s ease-in-out infinite alternate;
+}
+
+.avatar--walk .av-torso {
+  transform: rotate(3deg);
+}
+
+.avatar--walk .av-leg-front {
+  animation: av-thigh 0.72s ease-in-out infinite;
+}
+
+.avatar--walk .av-leg-front .av-shin {
+  animation: av-knee 0.72s ease-in-out infinite;
+}
+
+.avatar--walk .av-leg-front .av-foot {
+  animation: av-foot 0.72s ease-in-out infinite;
+}
+
+.avatar--walk .av-leg-back {
+  animation: av-thigh 0.72s ease-in-out infinite;
+  animation-delay: -0.36s;
+}
+
+.avatar--walk .av-leg-back .av-shin {
+  animation: av-knee 0.72s ease-in-out infinite;
+  animation-delay: -0.36s;
+}
+
+.avatar--walk .av-leg-back .av-foot {
+  animation: av-foot 0.72s ease-in-out infinite;
+  animation-delay: -0.36s;
+}
+
+.avatar--walk .av-arm-front {
+  animation: av-swing 0.72s ease-in-out infinite;
+  animation-delay: -0.36s;
+}
+
+.avatar--walk .av-arm-front .av-fore {
+  transform: rotate(-24deg);
+}
+
+.avatar--walk .av-arm-back {
+  animation: av-swing 0.72s ease-in-out infinite;
+}
+
+.avatar--walk .av-arm-back .av-fore {
+  transform: rotate(-20deg);
+}
+
+.avatar--walk .av-skirt {
+  animation: av-skirt 0.36s ease-in-out infinite alternate;
+}
+
+.avatar--walk.avatar--hop .av-body {
+  animation: av-hop 0.5s ease-in-out infinite;
+}
+
+.avatar--walk.avatar--hop .av-leg-one {
+  animation: av-squash 0.5s ease-in-out infinite;
+}
+
+.avatar--walk.avatar--hop .av-leg-one .av-shin {
+  animation: av-hop-knee 0.5s ease-in-out infinite;
+}
+
+.avatar--walk .av-lantern {
+  animation: av-lantern 0.72s ease-in-out infinite alternate;
+}
+
+/* ---------- Cheer ---------- */
+
+.avatar--cheer .av-figure {
+  animation: av-jump 0.6s ease-in-out 3;
+}
+
+.avatar--cheer .av-arm-front {
+  animation: av-celebrate-front 0.3s ease-in-out infinite alternate;
+}
+
+.avatar--cheer .av-arm-back {
+  animation: av-celebrate-back 0.3s ease-in-out infinite alternate;
+}
+
+.avatar--cheer .av-arm-front .av-fore,
+.avatar--cheer .av-arm-back .av-fore {
+  transform: rotate(0deg);
+}
+
+.avatar--cheer .av-shadow {
+  animation: av-shadow 0.6s ease-in-out 3;
+}
+
+.avatar--cheer .av-brows {
+  transform: translateY(-3.5px);
+}
+
+.av-glow {
+  animation: av-glow 1.4s ease-in-out infinite alternate;
+}
+
+/* ---------- Keyframes ---------- */
+
+@keyframes av-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-1.5px) scaleY(1.008);
+  }
+}
+
+@keyframes av-idle-arm {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(-11deg);
+  }
+}
+
+@keyframes av-idle-head {
+  0%,
+  40%,
+  100% {
+    transform: rotate(0deg);
+  }
+  55% {
+    transform: rotate(4deg);
+  }
+  75% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes av-skirt {
+  0%,
+  100% {
+    transform: skewX(0deg);
+  }
+  50% {
+    transform: skewX(2deg);
+  }
+}
+
+@keyframes av-nod {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-3deg) translateY(-0.5px);
+  }
+  70% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes av-look-ahead {
+  from {
+    transform: rotate(-2deg);
+  }
+  to {
+    transform: rotate(2deg) translateX(1px);
+  }
+}
+
+@keyframes av-explain-arm {
+  from {
+    transform: rotate(-18deg);
+  }
+  to {
+    transform: rotate(-48deg);
+  }
+}
+
+@keyframes av-explain-fore {
+  from {
+    transform: rotate(-35deg);
+  }
+  to {
+    transform: rotate(-80deg);
+  }
+}
+
+@keyframes av-hand-turn {
+  from {
+    transform: rotate(-10deg);
+  }
+  to {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes av-back-arm {
+  from {
+    transform: rotate(4deg);
+  }
+  to {
+    transform: rotate(16deg);
+  }
+}
+
+@keyframes av-wave {
+  from {
+    transform: rotate(-30deg);
+  }
+  to {
+    transform: rotate(28deg);
+  }
+}
+
+@keyframes av-point-arm {
+  from {
+    transform: rotate(-78deg);
+  }
+  to {
+    transform: rotate(-86deg);
+  }
+}
+
+@keyframes av-open-front {
+  from {
+    transform: rotate(-38deg);
+  }
+  to {
+    transform: rotate(-58deg);
+  }
+}
+
+@keyframes av-open-back {
+  from {
+    transform: rotate(38deg);
+  }
+  to {
+    transform: rotate(58deg);
+  }
+}
+
+@keyframes av-tap {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes av-celebrate-front {
+  from {
+    transform: rotate(-150deg);
+  }
+  to {
+    transform: rotate(-172deg);
+  }
+}
+
+@keyframes av-celebrate-back {
+  from {
+    transform: rotate(150deg);
+  }
+  to {
+    transform: rotate(172deg);
+  }
+}
+
+@keyframes av-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes av-thigh {
+  0%,
+  100% {
+    transform: rotate(-26deg);
+  }
+  50% {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes av-knee {
+  0%,
+  100% {
+    transform: rotate(4deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(8deg);
+  }
+  78% {
+    transform: rotate(46deg);
+  }
+}
+
+@keyframes av-foot {
+  0%,
+  100% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-18deg);
+  }
+  78% {
+    transform: rotate(-30deg);
+  }
+}
+
+@keyframes av-swing {
+  0%,
+  100% {
+    transform: rotate(-24deg);
+  }
+  50% {
+    transform: rotate(26deg);
+  }
+}
+
+@keyframes av-hop {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes av-squash {
+  0%,
+  100% {
+    transform: scaleY(0.92);
+  }
+  45% {
+    transform: scaleY(1.04);
+  }
+}
+
+@keyframes av-hop-knee {
+  0%,
+  100% {
+    transform: rotate(16deg);
+  }
+  45% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes av-lantern {
+  from {
+    transform: rotate(-12deg);
+  }
+  to {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes av-jump {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  15% {
+    transform: translateY(0) scale(1.06, 0.92);
+  }
+  45% {
+    transform: translateY(-22px) scale(0.96, 1.05);
+  }
+  80% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+}
+
+@keyframes av-shadow {
+  0%,
+  100% {
+    transform: scale(1);
+    transform-origin: 100px 288px;
+  }
+  45% {
+    transform: scale(0.7);
+    transform-origin: 100px 288px;
+  }
+}
+
+@keyframes av-glow {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar *,
+  .avatar {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.av-shadow {
+  transform-box: view-box;
+  transform-origin: 100px 288px;
+}
