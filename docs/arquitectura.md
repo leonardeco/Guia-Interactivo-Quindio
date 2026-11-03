@@ -16,7 +16,7 @@ El uso para el visitante está en [manual.md](manual.md). Esto es cómo está ar
 Onboarding (idioma → guía → gustos y pueblo de salida)
         │
         ▼
-App ── buildRoute(gustos, pueblo) ──► ruta corta en una zona
+App ── buildRoute(gustos, pueblo, lugares del mapa) ──► ruta corta, sin saltar de ciudad
  │
  ├─ "Siguiente parada" ─► goTo() ─► useWalker anima al guía ─► checkpoint()
  ├─ GPS (watchPosition) ─► findArrival() ─────────────────────► checkpoint()
@@ -34,14 +34,17 @@ checkpoint() ─► guarda sello ─► XP / nivel / medallas ─► Celebration
 | `pdc.lang` | Idioma elegido (o detectado del teléfono en la primera visita) |
 | `qui.guide` | Guía elegido |
 | `qui.tastes` | Gustos para la ruta |
-| `qui.base` | Pueblo de salida |
-| `qui.visited` | Sellos (ids, sin duplicados) |
-| `qui.routes` | Rutas completadas |
+| `qui.region` | Mapa abierto: `quindio`, `aruba` o `eje` |
+| `qui.base` | Pueblo de salida del Quindío. Aruba y el mapa de vecinos usan `qui.base.aruba` y `qui.base.eje` |
+| `qui.visited` | Sellos del Quindío. Los otros mapas usan `qui.visited.aruba` y `qui.visited.eje` |
+| `qui.routes` | Rutas completadas en el Quindío. Los otros mapas usan `qui.routes.aruba` y `qui.routes.eje` |
 | `pdc.voice` / `pdc.speed` | Voz activada y velocidad |
 
 Todas las lecturas y escrituras están envueltas en `try/catch` (modo privado, almacenamiento bloqueado).
 
 ## Mapa
+
+Hay tres mapas: Quindío, Aruba y el de vecinos. Cada uno trae sus lugares y su contorno. El de vecinos reutiliza el contorno del departamento; Pereira, Manizales, Sevilla, Caicedonia y Alcalá quedan fuera de ese verde. Los pines se reconstruyen al cambiar de mapa.
 
 - Los pines son elementos DOM (`Marker`) con fichas CSS. **MapLibre posiciona los marcadores con `transform`**, así que las animaciones (rebote, pulso) se aplican al hijo `.pin-token`, nunca al marcador.
 - De lejos (zoom menor a 11,5) se ven pueblos, destacados, miradores, parques y lugares concurridos. En el medio se ocultan restaurantes y cafés. De cerca se ve todo. Un filtro de tipo muestra solo esa categoría. La ruta, el lugar elegido y la siguiente parada siempre quedan visibles.

@@ -1,6 +1,26 @@
+<p align="center">
+  <img src="mapas.svg" alt="Guía del Quindío: el departamento, la isla de Aruba y los vecinos del norte" width="920">
+</p>
+
+<p align="center">
+  <a href="https://guia-interactivo-quindio.vercel.app"><img src="abrir.svg" alt="Abrir la guía" width="220"></a>
+</p>
+
 # Manual de la guía del Quindío
 
 Este manual es para quien usa la aplicación y para quien la muestra. Los nombres entre comillas son los botones tal como aparecen en español.
+
+## Los tres mapas
+
+El botón «Mapas», arriba, cambia de guía. Cada mapa guarda sus propios sellos. La ruta de un día no salta de una ciudad a otra.
+
+| | Quindío | Aruba | Quindío y vecinos |
+| --- | --- | --- | --- |
+| Qué muestra | Los doce municipios | La isla, con su costa | El Quindío, más Pereira, Manizales, Sevilla, Caicedonia y Alcalá |
+| Encuadre | «Ver todo el Quindío» | «Ver todo» | «Ver todo» |
+| Fiestas | «Calendario» | No hay calendario | El calendario del Quindío |
+| El verde | El departamento | La isla, no el mar | Solo el departamento. No hay línea del eje cafetero ni de Los Nevados |
+| Historia | «Historia del Quindío» | «Historia» | «Historia» |
 
 ## 1. Entrar por primera vez
 
@@ -31,15 +51,13 @@ Al entrar, el mapa muestra todo el Quindío.
 - De cerca se ve todo: hoteles, fincas, restaurantes, cafés y rumba.
 - Los filtros de arriba muestran un solo tipo. El de hospedaje se llama Hospedaje. El de lugares concurridos reúne las plazas donde se junta la gente. La parada de la ruta, el lugar elegido y la siguiente parada siguen visibles.
 - «3D» inclina el mapa y muestra el relieve. «2D» lo deja plano.
-- «Ver todo el Quindío» vuelve al encuadre del departamento.
+- «Ver todo el Quindío» vuelve al encuadre del departamento. En Aruba y en el mapa de vecinos el mismo botón dice «Ver todo».
 - El botón de descarga guarda la vista que se está viendo, para volver a verla sin red en la versión publicada. No baja el departamento entero. En `npm run dev` el mapa sigue pidiendo red.
 - El buscador de Lugares ignora las tildes: `jardin botanico` encuentra el Jardín Botánico del Quindío.
 
 Cada pin abre la ficha del lugar: nombre, pueblo, distancia y lo que el guía dice de ese sitio. Si el lugar tiene foto, es de Wikimedia Commons y el crédito incluye el año de la toma. Hay foto de Filandia (2025), Circasia (2024), el valle del Cocora, el Parque Nacional del Café, el aeropuerto El Edén y Calarcá (2022–2023) y Salento (2020). Armenia se queda sin foto porque en Commons no hay una reciente de la plaza. La ficha muestra la temperatura y si llueve, con el crédito de Open-Meteo. En un pueblo, si hay fiesta con fecha pública, sale ahí y pide confirmar en la alcaldía. El botón «Calendario» junta esas fiestas: Calarcá en junio, Armenia hacia el 14 de octubre, Quimbaya el 7 y 8 de diciembre, y Filandia en agosto. Esa de Filandia se suspendió en 2026 y no hay fecha nueva. Las fechas cambian de un año a otro. «Compartir» copia un enlace del lugar abierto o, si no hay lugar, de la ruta armada. Abajo hay enlace a la página oficial del paisaje cafetero y a quindiocorazondecolombia.com.
 
 Al valle del Cocora no se llega caminando desde Armenia. El jeep sale de la plaza de Salento. El aeropuerto queda en La Tebaida, a unos 18 km de Armenia.
-
-El botón «Mapas», arriba, cambia de mapa. Quindío es el de esta guía. Aruba es la isla, con la costa, sus pueblos y sus sellos aparte; ahí el encuadre dice «Ver todo» y no hay calendario de fiestas. «Quindío y vecinos» deja estos lugares y suma Pereira, Manizales y tres pueblos del norte del Valle: Sevilla, Caicedonia y Alcalá. El verde sigue siendo solo el departamento. No hay línea del eje cafetero ni de Los Nevados. Cada mapa guarda sus sellos. La ruta de un día no salta de Pereira a Armenia, ni de una de esas ciudades a otra.
 
 ## 3. La ruta
 
@@ -100,7 +118,7 @@ El botón de sellos abre el pasaporte.
 - Cada lugar nuevo suma un sello y puntos.
 - La cuadrícula del pasaporte muestra los imprescindibles: los doce pueblos y los sitios con historia escrita. Un hotel o un restaurante suman sello si se visitan, pero no hacen parte de esa meta.
 - Niveles: Visitante, Caminante, Explorador, Baquiano, Guía de finca, Andariego, Embajador del Quindío.
-- Medallas: Primer sello, cinco visitas, diez visitas, cuatro lugares de café, tres miradores, cuatro cafés o restaurantes, una ruta terminada, y Quindío mayor (todos los imprescindibles).
+- Medallas: Primer sello, cinco visitas, diez visitas, cuatro lugares de café, tres miradores, cuatro cafés o restaurantes, una ruta terminada, y Quindío mayor (todos los imprescindibles). En Aruba y en el mapa de vecinos esa última se llama «Mapa completo».
 
 Al marcar un sello nuevo hay una pantalla de celebración. Si se toca el mapa en ese momento, el guía vuelve a su pose normal. El sello ya quedó guardado.
 
