@@ -9,7 +9,8 @@ import { answerQuestion } from './ask'
 import { buildRoute, MAX_STOPS } from './route'
 import { languageCodes } from '../i18n/languages'
 import { regionHistory } from '../data/history'
-import { fiestaText } from '../data/visit'
+import { fiestaText, placePhoto } from '../data/visit'
+import { findNamed, placeHref, readShare } from './link'
 import { canListen } from './listen'
 
 const salento = findPlace('Salento', 'Salento')!
@@ -233,5 +234,15 @@ describe('visit notes', () => {
   it('names the December lights in Quimbaya and stays quiet without a microphone', () => {
     expect(fiestaText('Quimbaya', 'es')).toMatch(/diciembre/i)
     expect(canListen()).toBe(false)
+  })
+
+  it('shares a place by name and keeps the newer photo credit', () => {
+    expect(readShare('?lugar=Salento&gustos=coffee,nope').tastes).toEqual(['coffee'])
+    expect(findNamed('quimbaya')?.zone).toBe('town')
+    expect(placeHref('https://guia.example/app', 'Salento')).toBe('https://guia.example/app?lugar=Salento')
+    expect(placePhoto('Filandia')?.credit).toContain('2025')
+    expect(placePhoto('Salento')?.credit).toContain('2020')
+    expect(placePhoto('Circasia')?.credit).toContain('2024')
+    expect(fiestaText('Filandia', 'es')).toMatch(/suspendieron/i)
   })
 })

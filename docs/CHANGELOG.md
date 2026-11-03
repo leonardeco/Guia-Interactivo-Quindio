@@ -10,6 +10,9 @@
 - 25 idiomas, incluido árabe de derecha a izquierda.
 - Voz neuronal gratuita, con la voz del teléfono como respaldo. Con el micrófono también se le puede hablar al guía.
 - Vista 3D con relieve, calendario de fiestas y lugares concurridos (plazas y parques donde se junta la gente).
+- Fotos de Wikimedia con el año de la toma: Filandia 2025, Circasia 2024, Cocora, Parque del Café, aeropuerto y Calarcá 2022–2023, Salento 2020.
+- «Compartir» copia un enlace que abre un lugar o la ruta.
+- Filandia queda en el calendario: las fiestas de agosto de 2026 se suspendieron y no hay fecha nueva.
 - Paleta verde y barro. El pasaporte cuenta los lugares imprescindibles.
 
 ## 0.2.0 — 2026-10-22

@@ -52,7 +52,9 @@ Los lugares y el contorno salen de OpenStreetMap. El hospedaje es el que el mapa
 
 La historia se cuenta solo donde hay un hecho público: la fundación de un pueblo, el departamento en 1966, el sismo de 1999, el Paisaje Cultural Cafetero y sitios como el Parque Nacional del Café, el valle del Cocora o el Museo del Oro Quimbaya. El paisaje es Patrimonio Mundial desde 2011. La lista oficial cubre 11 de los 12 municipios; La Tebaida no está en esa lista, aunque sí está en el departamento y ahí queda el aeropuerto. Un negocio sin fecha no recibe una inventada.
 
-En la ficha de un pueblo aparecen las fiestas que ya tienen fecha pública, con la nota de confirmar en la alcaldía. El clima de la ficha sale de Open-Meteo: temperatura y si llueve o no. Las fotos, cuando hay, son de Wikimedia Commons y llevan el crédito. Salento, Filandia, el valle del Cocora y el Parque Nacional del Café tienen foto. El resto no, para no inventar una imagen.
+En la ficha de un pueblo aparecen las fiestas que ya tienen fecha pública, con la nota de confirmar en la alcaldía. El calendario incluye Calarcá en junio, Armenia hacia el 14 de octubre, Quimbaya el 7 y 8 de diciembre, y Filandia en agosto. Las Fiestas Aniversarias y del Canasto de Filandia se suspendieron en 2026 y la alcaldía no publicó otra fecha. El clima de la ficha sale de Open-Meteo: temperatura y si llueve o no. Las fotos, cuando hay, son de Wikimedia Commons y el crédito lleva el año en que se tomaron: Filandia 2025, Circasia 2024, el valle del Cocora, el Parque Nacional del Café, el aeropuerto El Edén y Calarcá entre 2022 y 2023, y Salento en 2020. Armenia no tiene una foto reciente en Commons, así que su ficha va sin imagen.
+
+«Compartir» copia un enlace. Si hay un lugar abierto, el enlace lo abre (`?lugar=`). Si no, abre la ruta con el pueblo de salida y los gustos (`?desde=` y `?gustos=`).
 
 Nombres y horarios cambian. Conviene confirmar antes de ir. La ficha enlaza la página oficial del Paisaje Cultural Cafetero y quindiocorazondecolombia.com.
 

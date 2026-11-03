@@ -13,7 +13,7 @@ export const crowds: Gate[] = [
   { name: 'Parque Antonio José de Sucre', town: 'Armenia', lat: 4.5360491, lng: -75.6691458, reach: 70 },
 ]
 
-export const fiestaTowns = ['Calarcá', 'Armenia', 'Quimbaya'] as const
+export const fiestaTowns = ['Calarcá', 'Armenia', 'Filandia', 'Quimbaya'] as const
 
 const gateCopy = {
   'Aeropuerto Internacional El Edén': col([
@@ -132,6 +132,33 @@ const fiestaCopy = {
     '10月14日前後は市の記念日で、アルメニアが祝う。内容は年ごとに変わる。日付は役場で確認して。',
     '10월 14일 전후는 도시 기념일이고 아르메니아가 축제를 엽니다. 일정은 해마다 달라집니다. 날짜는 시청에서 확인하세요.',
   ]),
+  Filandia: col([
+    'En agosto, Filandia hace las Fiestas Aniversarias y del Canasto. En 2026 se suspendieron y la alcaldía no publicó otra fecha. Confirme antes de viajar.',
+    'In August, Filandia holds its Anniversary and Basket Festival. In 2026 it was suspended and the town hall has not published another date. Confirm before you travel.',
+    'Em agosto, Filandia faz as Festas de Aniversário e do Cesto. Em 2026 foram suspensas e a prefeitura não publicou outra data. Confirme antes de viajar.',
+    'En août, Filandia fête son anniversaire et le panier. En 2026 c’était suspendu et la mairie n’a pas donné d’autre date. Confirmez avant de voyager.',
+    'Im August feiert Filandia das Jubiläums- und Korbfest. 2026 wurde es ausgesetzt, ein neues Datum fehlt. Vor der Reise im Rathaus bestätigen.',
+    'Ad agosto Filandia fa la festa dell’anniversario e del cesto. Nel 2026 è stata sospesa e il municipio non ha dato un’altra data. Conferma prima di partire.',
+    'In augustus viert Filandia het jubileum- en mandenfeest. In 2026 werd het opgeschort en er is geen nieuwe datum. Bevestig het voor je reist.',
+    'A l’agost, Filandia fa les festes d’aniversari i del cistell. El 2026 es van suspendre i no hi ha una altra data. Confirma-ho abans de viatjar.',
+    'I augusti har Filandia jubileums- och korgfesten. 2026 ställdes den in och inget nytt datum finns. Bekräfta före resan.',
+    'I august holder Filandia jubilæums- og kurvefesten. I 2026 blev den aflyst, og der er ingen ny dato. Bekræft den før rejsen.',
+    'I august har Filandia jubileums- og kurvefesten. I 2026 ble den avlyst, og ny dato mangler. Bekreft den før reisen.',
+    'W sierpniu Filandia obchodzi święto rocznicy i kosza. W 2026 je zawieszono i nie ma nowej daty. Potwierdź przed podróżą.',
+    'V srpnu má Filandia slavnost výročí a koše. V roce 2026 byla odložena a nové datum není. Ověř ho před cestou.',
+    'În august, Filandia ține sărbătoarea aniversară și a coșului. În 2026 a fost suspendată și nu există altă dată. Confirmă înainte de drum.',
+    'Augusztusban Filandia az évforduló és a kosár ünnepét tartja. 2026-ban elhalasztották, új dátum nincs. Utazás előtt erősítsd meg.',
+    'Τον Αύγουστο η Φιλάντια κάνει τη γιορτή επετείου και καλαθιού. Το 2026 αναβλήθηκε και δεν υπάρχει νέα ημερομηνία. Επιβεβαίωσέ την πριν ταξιδέψεις.',
+    'Ağustosta Filandia yıldönümü ve sepet şenliğini yapar. 2026’da askıya alındı ve yeni tarih yok. Yola çıkmadan doğrula.',
+    'В августе Филандия отмечает праздник годовщины и корзины. В 2026 его отложили, новой даты нет. Подтвердите до поездки.',
+    'У серпні Філандія відзначає свято річниці й кошика. У 2026 його відклали, нової дати немає. Підтвердьте до поїздки.',
+    'في أغسطس تحتفل فيلانديا بعيد التأسيس والسلة. في 2026 أُجّل ولم يُنشر تاريخ جديد. أكّد قبل السفر.',
+    'अगस्त में फिलैंडिया वर्षगाँठ और टोकरी उत्सव करता है। 2026 में टल गया और नई तारीख नहीं है। यात्रा से पहले पक्की करें।',
+    'Pada Agustus, Filandia menggelar pesta ulang tahun dan keranjang. Tahun 2026 ditunda dan belum ada tanggal baru. Konfirmasi sebelum berangkat.',
+    '八月菲兰迪亚过周年和篮子节。2026年停办了，还没有新日期。出发前请确认。',
+    '8月にフィランディアは記念日とかごの祭りをする。2026年は中止で、新しい日付はない。旅の前に確認して。',
+    '8월에 필란디아는 기념일과 바구니 축제를 합니다. 2026년에는 미뤄졌고 새 날짜가 없습니다. 떠나기 전에 확인하세요.',
+  ]),
   Quimbaya: col([
     'El 7 y 8 de diciembre, Quimbaya enciende el Festival de Velas y Faroles. Las calles se llenan y conviene llegar temprano. Confirme la fecha en la alcaldía.',
     'On 7 and 8 December, Quimbaya lights the Candle and Lantern Festival. The streets fill up, so arrive early. Confirm the date with the town hall.',
@@ -168,20 +195,32 @@ export function fiestaText(town: string, lang: Lang): string | null {
 
 const photos: Record<string, { src: string; credit: string }> = {
   Salento: {
-    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Callerealsalento.JPG/800px-Callerealsalento.JPG',
-    credit: 'Wikimedia Commons',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Calle_5%2C_Salento_01.jpg/960px-Calle_5%2C_Salento_01.jpg',
+    credit: 'Wikimedia Commons, 2020',
   },
   Filandia: {
-    src: 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Filandia.jpg',
-    credit: 'Wikimedia Commons',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Filandia%2C_Quind%C3%ADo.jpg/960px-Filandia%2C_Quind%C3%ADo.jpg',
+    credit: 'Wikimedia Commons, 2025',
+  },
+  Circasia: {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Restaurantes_en_Circasia.jpg/960px-Restaurantes_en_Circasia.jpg',
+    credit: 'Wikimedia Commons, 2024',
+  },
+  Calarcá: {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Parroquia_San_Jos%C3%A9_de_Calarc%C3%A1_en_2022.jpg/960px-Parroquia_San_Jos%C3%A9_de_Calarc%C3%A1_en_2022.jpg',
+    credit: 'Wikimedia Commons, 2022',
   },
   'Valle de Cocora': {
-    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cocora_valley.JPG/800px-Cocora_valley.JPG',
-    credit: 'Wikimedia Commons',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Valle_de_Cocora._Salento%2C_Quind%C3%ADo.jpg/960px-Valle_de_Cocora._Salento%2C_Quind%C3%ADo.jpg',
+    credit: 'Wikimedia Commons, 2023',
   },
   'Parque Nacional del Café': {
-    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Parque_del_caf%C3%A9%2C_panor%C3%A1mica_parque_ecoturistico.jpg/800px-Parque_del_caf%C3%A9%2C_panor%C3%A1mica_parque_ecoturistico.jpg',
-    credit: 'Wikimedia Commons',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Parque_del_caf%C3%A9._Montenegro%2C_Quind%C3%ADo.jpg/960px-Parque_del_caf%C3%A9._Montenegro%2C_Quind%C3%ADo.jpg',
+    credit: 'Wikimedia Commons, 2023',
+  },
+  'Aeropuerto Internacional El Edén': {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Aeropuerto_El_Ed%C3%A9n_en_enero_de_2023.jpg/960px-Aeropuerto_El_Ed%C3%A9n_en_enero_de_2023.jpg',
+    credit: 'Wikimedia Commons, 2023',
   },
 }
 

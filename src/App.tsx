@@ -12,6 +12,7 @@ import { buildRoute } from './guide/route'
 import { findArrival, isInsideQuindio, nearestPlaces } from './guide/checkpoint'
 import { answerQuestion } from './guide/ask'
 import { roadLine } from './guide/roads'
+import { findNamed, placeHref, readShare, routeHref } from './guide/link'
 import { bearingDeg, compassIndex, distanceMeters, type Point } from './guide/geo'
 import * as lines from './guide/lines'
 import { Onboarding } from './guide/Onboarding'
@@ -121,8 +122,11 @@ export function App() {
     setRateScale(speedScale[readSpeed()])
     warmVoices()
     if (readGuide()) {
-      const plan = buildRoute(readList('qui.tastes', tasteList), townPoint(readBase()) ?? entrance)
-      setText(`${lines.greeting(stored, findCharacter(readGuide()))} ${lines.startHint(stored, plan.length > 0)}`)
+      const share = readShare(window.location.search)
+      if (!share.place && !share.base && share.tastes.length === 0) {
+        const plan = buildRoute(readList('qui.tastes', tasteList), townPoint(readBase()) ?? entrance)
+        setText(`${lines.greeting(stored, findCharacter(readGuide()))} ${lines.startHint(stored, plan.length > 0)}`)
+      }
     }
     const unlock = () => unlockAudio()
     window.addEventListener('pointerdown', unlock, { once: true })
@@ -357,6 +361,23 @@ export function App() {
     showOnMap(place, place.reach >= 120 ? 14 : 16)
     chime('tap')
     say(lines.aboutPlace(live.current.lang, place))
+    window.history.replaceState(null, '', placeHref(window.location.href, place.name.es))
+  }
+
+  function shareLink() {
+    const href = selected
+      ? placeHref(window.location.href, selected.name.es)
+      : routeHref(window.location.href, base, tastes)
+    window.history.replaceState(null, '', href)
+    const write = navigator.clipboard?.writeText(href)
+    if (!write) {
+      say(i18n.t('shareFail'))
+      return
+    }
+    void write.then(
+      () => say(i18n.t('copied')),
+      () => say(i18n.t('shareFail')),
+    )
   }
 
   function finishOnboarding(id: CharacterId, likes: Taste[], home: string) {
@@ -407,6 +428,45 @@ export function App() {
   const remaining = route.filter((stop) => !visited.includes(stop.id))
   const next = remaining[0] ?? null
   const position = user ?? walker.pos
+  const openedLink = useRef(false)
+  useEffect(() => {
+    if (onboarding !== null || openedLink.current) return
+    openedLink.current = true
+    const share = readShare(window.location.search)
+    if (share.place) {
+      const place = findNamed(share.place)
+      if (place) selectPlace(place)
+      return () => {
+        openedLink.current = false
+      }
+    }
+    if (!share.base && share.tastes.length === 0) {
+      return () => {
+        openedLink.current = false
+      }
+    }
+    const home = share.base && municipalities.includes(share.base) ? share.base : base
+    const likes = share.tastes.length > 0 ? share.tastes : tastes
+    const start = townPoint(home) ?? entrance
+    const plan = buildRoute(likes, start)
+    if (share.base && municipalities.includes(share.base)) {
+      setBase(home)
+      save('qui.base', home)
+    }
+    if (share.tastes.length > 0) {
+      setTastes(likes)
+      save('qui.tastes', JSON.stringify(likes))
+    }
+    setRoute(plan)
+    live.current.route = plan
+    setSelected(null)
+    setTarget(null)
+    const first = plan[0]
+    showOnMap(first ?? start, first && first.reach >= 120 ? 13 : 15)
+    return () => {
+      openedLink.current = false
+    }
+  }, [onboarding])
   const roadKey = target ? `go:${target.id}` : remaining.map((stop) => stop.id).join(',')
   const [road, setRoad] = useState<{ key: string; line: Point[] | null }>({ key: '', line: null })
   if (road.key !== roadKey) setRoad({ key: roadKey, line: null })
@@ -557,6 +617,7 @@ export function App() {
               say(lines.parkStory(live.current.lang), { mood: 'explain' })
             }}
             onCalendar={() => openSheet('calendar')}
+            onShare={shareLink}
             onLocate={() => (gps === 'on' || gps === 'searching' ? stopGps() : startGps())}
             onRepeat={() => say(text)}
             onHush={hush}

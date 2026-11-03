@@ -16,6 +16,7 @@ import {
   Pause,
   RotateCcw,
   Route,
+  Share2,
   Square,
   Volume2,
   VolumeX,
@@ -65,6 +66,7 @@ type Props = {
   onCloseSelected: () => void
   onAsk: (question: string) => void
   onCalendar: () => void
+  onShare: () => void
   onHeight: (height: number) => void
 }
 
@@ -353,6 +355,10 @@ export function GuideDock(props: Props) {
           <button type="button" className="tool" onClick={props.onCalendar} aria-label={t('calendar')} title={t('calendar')}>
             <CalendarDays size={20} aria-hidden="true" />
             <span>{t('calendar')}</span>
+          </button>
+          <button type="button" className="tool" onClick={props.onShare} aria-label={t('share')} title={t('share')}>
+            <Share2 size={20} aria-hidden="true" />
+            <span>{t('share')}</span>
           </button>
           {props.talking ? (
             <button type="button" className="tool" onClick={props.onHush} aria-label={t('stop')} title={t('stop')}>
